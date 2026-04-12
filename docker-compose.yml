@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  event-manager-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: event-manager-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      # Note: Production environment variables for Firebase/Google Maps should be passed here or loaded from .env
+    env_file:
+      - .env.example # Using .env.example as a placeholder, ensure a true .env is used in prod
