@@ -277,7 +277,7 @@ export default function Home() {
                   <div key={q.standId} className="flex items-center justify-between">
                     <span className="text-xs text-white">{q.standName.replace("Restroom ", "")}</span>
                     <span className="text-xs font-bold" style={{ color: getWaitColor(q.estimatedWaitMin) }}>
-                      {q.estimatedWaitMin}m
+                      {q.estimatedWaitMin} min
                     </span>
                   </div>
                 ))}
@@ -299,7 +299,7 @@ export default function Home() {
                 <div className="space-y-2">
                   {activeOrders.slice(0, 3).map((order) => (
                     <div key={order.id} className="flex items-center justify-between">
-                      <span className="text-xs text-white truncate max-w-[80px]">{order.standName}</span>
+                      <span className="text-xs text-white truncate max-w-[100px]">{order.standName}</span>
                       <span
                         className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
                           order.status === "ready"

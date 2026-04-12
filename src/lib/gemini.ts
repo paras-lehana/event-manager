@@ -1,9 +1,13 @@
 import { ChatMessage, FunctionCall } from "./types";
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
-const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || process.env.GEMINI_API_KEY || "";
+const GEMINI_ENDPOINT = "https://antigravity.aidhunik.com/v1/chat/completions";
 
 const SYSTEM_PROMPT = `You are the AI Stadium Concierge for SoFi Stadium. You help attendees navigate the venue, find food and drinks, check queue times, and coordinate with their crew.
+
+Current game: Rams vs 49ers at SoFi Stadium
+Score: Rams 24 - 49ers 17 (Q3, 8:42 remaining)
+Key stats: QB 18/25, 245 yds, 2 TD | Rush: 98 yds | Possession: 18:32
 
 You have access to these functions:
 - navigateTo(destination: string): Navigate to a specific location in the stadium
@@ -12,63 +16,75 @@ You have access to these functions:
 - findNearest(type: "food"|"beverage"|"restroom"|"merchandise"): Find the nearest stand of a type
 - shareLocation(): Share your location with your crew
 
-Always be concise, helpful, and enthusiastic about the game!`;
+Always be concise, helpful, and enthusiastic about the game! Keep responses short (2-3 sentences max). Use emojis.`;
 
-// Function declarations for Gemini Function Calling
-const FUNCTION_DECLARATIONS = [
+// Tools for OpenAI-compatible API
+const TOOLS = [
   {
-    name: "navigateTo",
-    description: "Navigate user to a specific location in the stadium",
-    parameters: {
-      type: "object",
-      properties: {
-        destination: { type: "string", description: "The destination to navigate to (e.g. 'Section 114', 'Craft Brews stand', 'Restroom A')" },
+    type: "function",
+    function: {
+      name: "navigateTo",
+      description: "Navigate user to a specific location in the stadium",
+      parameters: {
+        type: "object",
+        properties: {
+          destination: { type: "string", description: "The destination to navigate to (e.g. 'Section 114', 'Craft Brews stand', 'Restroom A')" },
+        },
+        required: ["destination"],
       },
-      required: ["destination"],
-    },
+    }
   },
   {
-    name: "orderFood",
-    description: "Place a food or drink order at a concession stand",
-    parameters: {
-      type: "object",
-      properties: {
-        standId: { type: "string", description: "The stand ID to order from" },
-        items: {
-          type: "array",
+    type: "function",
+    function: {
+      name: "orderFood",
+      description: "Place a food or drink order at a concession stand",
+      parameters: {
+        type: "object",
+        properties: {
+          standId: { type: "string", description: "The stand ID to order from" },
           items: {
-            type: "object",
-            properties: {
-              name: { type: "string" },
-              quantity: { type: "number" },
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                name: { type: "string" },
+                quantity: { type: "number" },
+              },
             },
           },
         },
+        required: ["standId", "items"],
       },
-      required: ["standId", "items"],
-    },
+    }
   },
   {
-    name: "checkQueue",
-    description: "Check the current wait time for a concession stand or restroom",
-    parameters: {
-      type: "object",
-      properties: {
-        standId: { type: "string", description: "The stand ID to check" },
+    type: "function",
+    function: {
+      name: "checkQueue",
+      description: "Check the current wait time for a concession stand or restroom",
+      parameters: {
+        type: "object",
+        properties: {
+          standId: { type: "string", description: "The stand ID to check" },
+        },
+        required: ["standId"],
       },
-      required: ["standId"],
-    },
+    }
   },
   {
-    name: "findNearest",
-    description: "Find the nearest food stand, drink stand, restroom, or merchandise shop",
-    parameters: {
-      type: "object",
-      properties: {
-        type: { type: "string", enum: ["food", "beverage", "restroom", "merchandise"], description: "Type of venue point" },
+    type: "function",
+    function: {
+      name: "findNearest",
+      description: "Find the nearest food stand, drink stand, restroom, or merchandise shop",
+      parameters: {
+        type: "object",
+        properties: {
+          type: { type: "string", enum: ["food", "beverage", "restroom", "merchandise"], description: "Type of venue point" },
+        },
+        required: ["type"],
       },
-      required: ["type"],
-    },
+    }
   },
 ];
 
@@ -142,32 +158,108 @@ export async function sendMessageToGemini(
   try {
     const response = await fetch(GEMINI_ENDPOINT, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${GEMINI_API_KEY}`
+      },
       body: JSON.stringify({
-        system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
-        contents: messages.map((m) => ({
-          role: m.role === "assistant" ? "model" : "user",
-          parts: [{ text: m.content }],
-        })),
-        tools: [{ function_declarations: FUNCTION_DECLARATIONS }],
+        model: "gemini-3-flash",
+        messages: [
+          { role: "system", content: SYSTEM_PROMPT },
+          ...messages.map((m) => ({
+            role: m.role,
+            content: m.content,
+          }))
+        ],
+        tools: TOOLS,
       }),
     });
 
     const data = await response.json();
-    const candidate = data.candidates?.[0]?.content?.parts?.[0];
+    const candidate = data.choices?.[0]?.message;
 
-    if (candidate?.functionCall) {
-      return {
-        content: `Executing ${candidate.functionCall.name}...`,
-        functionCall: {
-          name: candidate.functionCall.name,
-          args: candidate.functionCall.args,
-        },
-      };
+    if (candidate?.tool_calls?.length > 0) {
+      const toolCall = candidate.tool_calls[0].function;
+      
+      let parsedArgs = toolCall.arguments;
+      if (typeof parsedArgs === "string") {
+        try {
+          parsedArgs = JSON.parse(parsedArgs);
+        } catch {
+          parsedArgs = {};
+        }
+      }
+
+      const functionCall = { name: toolCall.name, args: parsedArgs };
+
+      // Simulate executing the function and get a natural language follow-up
+      const toolResult = simulateToolExecution(functionCall);
+      
+      try {
+        // Make a follow-up API call with the tool result so the model
+        // generates a natural language response incorporating the data
+        const followUp = await fetch(GEMINI_ENDPOINT, {
+          method: "POST",
+          headers: { 
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${GEMINI_API_KEY}`
+          },
+          body: JSON.stringify({
+            model: "gemini-3-flash",
+            messages: [
+              { role: "system", content: SYSTEM_PROMPT },
+              ...messages.map((m) => ({ role: m.role, content: m.content })),
+              { role: "assistant", content: null, tool_calls: candidate.tool_calls },
+              { role: "tool", tool_call_id: candidate.tool_calls[0].id, content: JSON.stringify(toolResult) },
+            ],
+          }),
+        });
+        const followUpData = await followUp.json();
+        const followUpContent = followUpData.choices?.[0]?.message?.content;
+        if (followUpContent) {
+          return { content: followUpContent, functionCall };
+        }
+      } catch {
+        // If follow-up fails, use local fallback with the function call badge
+      }
+
+      // Fallback: use local response generation with the function call badge
+      const localResp = generateLocalResponse(lastMessage.content);
+      return { content: localResp.content, functionCall };
     }
 
-    return { content: candidate?.text || "I'm sorry, I couldn't process that. Could you try again?" };
-  } catch {
+    return { content: candidate?.content || "I'm sorry, I couldn't process that. Could you try again?" };
+  } catch (error) {
+    console.error("LLM Error:", error);
     return generateLocalResponse(lastMessage.content);
+  }
+}
+
+// Simulate tool execution to provide results back to the model
+function simulateToolExecution(fc: FunctionCall): Record<string, unknown> {
+  switch (fc.name) {
+    case "findNearest":
+      if (fc.args.type === "restroom") {
+        return { found: "Restroom C", location: "Section 103, Level 1", waitTime: "2 min", distance: "30m" };
+      }
+      if (fc.args.type === "beverage") {
+        return { found: "Premium Bar", location: "Section 201, Level 2", waitTime: "2 min", distance: "45m" };
+      }
+      if (fc.args.type === "food") {
+        return { found: "Hot Dog Heaven", location: "Section 112, Level 1", waitTime: "3 min", distance: "25m" };
+      }
+      return { found: "Team Store", location: "Section 103, Level 1", waitTime: "5 min", distance: "60m" };
+
+    case "checkQueue":
+      return { standId: fc.args.standId, currentWait: "4 min", peopleInLine: 8, trend: "decreasing" };
+
+    case "navigateTo":
+      return { destination: fc.args.destination, estimatedWalkTime: "2 min", route: "Turn right at Section 110, continue 50m" };
+
+    case "orderFood":
+      return { orderId: `ORD-${Date.now()}`, status: "confirmed", estimatedReady: "5 min", pickupLocation: fc.args.standId };
+
+    default:
+      return { status: "ok" };
   }
 }
