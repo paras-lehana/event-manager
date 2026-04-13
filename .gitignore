@@ -40,4 +40,13 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-docs/prompts
+docs/promptsnode_modules/
+venv/
+.venv/
+.next/
+dist/
+build/
+__pycache__/
+selenium-profile/
+*.pyc
+*.log
