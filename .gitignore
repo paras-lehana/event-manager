@@ -50,3 +50,4 @@ __pycache__/
 selenium-profile/
 *.pyc
 *.log
+node_modules/
