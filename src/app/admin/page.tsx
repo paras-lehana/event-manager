@@ -72,44 +72,61 @@ export default function AdminHUD() {
     }, 50);
   };
 
-  const handleGenerateCrowd = async () => {
+  const handleGenerateCrowd = async (scenario: string = "RANDOM") => {
     setIsSimulating(true);
-    addLog("INITIATING_AI_CROWD_GENERATION", "warn");
+    addLog(`INITIATING_STRATEGIC_SCENARIO: ${scenario}`, "warn");
+    addLog("COMPUTING_IDEAL_DENSITY_MAP...", "info");
     
-    // Simulate API delay
+    // Simulate Gemini Reasoning delay
     await new Promise(r => setTimeout(r, 1500));
     
     const avatars = ["🏈", "🍺", "🌭", "🧢", "👟", "📣"];
-    const roles = ["Specialist", "Support", "Field Op", "Medic"];
+    const roles = {
+      HALFTIME: ["Crowd Marshal", "Vendor Support", "Rapid Response"],
+      EMERGENCY: ["Medic", "Security", "Evacuation Lead"],
+      RANDOM: ["Specialist", "Support", "Field Op", "Medic"]
+    };
     
-    for (let i = 0; i < 5; i++) {
+    const count = scenario === "HALFTIME" ? 8 : 4;
+    
+    for (let i = 0; i < count; i++) {
+       const roleList = roles[scenario as keyof typeof roles] || roles.RANDOM;
        const newMember = {
-         uid: `MOCK_${Math.random().toString(36).substr(2, 5).toUpperCase()}`,
-         name: `SIM_UNIT_${i + 101}`,
+         uid: `AGNT_${Math.random().toString(36).substr(2, 5).toUpperCase()}`,
+         name: `OP_UNIT_${i + 101}`,
          avatar: avatars[Math.floor(Math.random() * avatars.length)],
-         role: roles[Math.floor(Math.random() * roles.length)],
-         location: "SECTION_T_4",
+         role: roleList[Math.floor(Math.random() * roleList.length)],
+         location: "GRID_NODE_" + Math.floor(Math.random() * 50),
          status: "active",
          lastSeen: Date.now()
        };
        
        await push(ref(rtdb, "crew"), newMember);
-       addLog(`REGISTERED_ENTITY: ${newMember.name}`, "success");
-       await new Promise(r => setTimeout(r, 200));
+       addLog(`STRATEGIC_DEPLOYMENT: ${newMember.name} [${newMember.role}]`, "success");
+       await new Promise(r => setTimeout(r, 150));
     }
     
     setIsSimulating(false);
-    addLog("SIMULATION_COMPLETE", "info");
+    addLog(`SCENARIO_${scenario}_STABILIZED`, "info");
   };
 
-  const handleCSVUpload = () => {
-    addLog("CSV_BUFFER_READY... SELECT_FILE_ON_HOST", "info");
-    // Mock upload
-    setTimeout(() => {
-      addLog("INGESTING_RECORDS: 114_ENTRIES", "info");
-      addLog("PARSING_GEODATA...", "warn");
-      addLog("SUCCESS: CROWD_RECORDS_UPDATED", "success");
-    }, 1000);
+  const handleCSVUpload = (data: string) => {
+    addLog("PARSING_INGESTION_STREAM...", "warn");
+    try {
+      // Simulate parsing
+      const rows = data.split('\n').filter(r => r.length > 5);
+      addLog(`DETECTED_${rows.length}_ENTRIES`, "info");
+      
+      rows.forEach((row, i) => {
+        setTimeout(() => {
+          addLog(`INGESTED: ${row.split(',')[0] || 'RECORD_' + i}`, "success");
+        }, i * 50);
+      });
+      
+      setTimeout(() => addLog("BULK_INGESTION_SYNC_COMPLETE", "success"), rows.length * 50 + 100);
+    } catch (e) {
+      addLog("INGESTION_ERROR: INVALID_FORMAT", "error");
+    }
   };
 
   return (
@@ -262,34 +279,37 @@ export default function AdminHUD() {
                 </GlassCard>
 
                 <div className="grid grid-cols-2 gap-6">
-                  <GlassCard className="!p-6 border-[#00f3ff]/20 bg-[#00f3ff]/5">
-                    <h3 className="text-sm font-black tracking-widest uppercase mb-4">CROWD_CONTROL_API</h3>
+                  <GlassCard className="!p-6 border-[#6366f1]/20 bg-[#6366f1]/5">
+                    <h3 className="text-sm font-black tracking-widest uppercase mb-4 text-[#6366f1]">STRATEGIC_AI_OPS</h3>
                     <div className="flex flex-col gap-3">
-                      <button 
-                        onClick={handleGenerateCrowd}
-                        disabled={isSimulating}
-                        className={`w-full py-3 rounded border border-[#00f3ff]/40 text-[10px] font-black uppercase tracking-widest transition-all ${isSimulating ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#00f3ff]/20 active:scale-95'}`}
-                      >
-                        {isSimulating ? "GENERATING..." : "GENERATE_AI_SURGE ✦"}
-                      </button>
-                      <button 
-                        onClick={handleCSVUpload}
-                        className="w-full py-3 rounded border border-white/10 text-[10px] font-black uppercase tracking-widest hover:bg-white/5 transition-all active:scale-95"
-                      >
-                        UPLOAD_CROWD_CSV ▷
-                      </button>
+                      <div className="grid grid-cols-2 gap-2">
+                        {["HALFTIME", "EMERGENCY", "ENTRANCE", "RANDOM"].map(s => (
+                          <button 
+                            key={s}
+                            disabled={isSimulating}
+                            onClick={() => handleGenerateCrowd(s)}
+                            className={`py-2 rounded border border-[#6366f1]/40 text-[9px] font-black uppercase tracking-widest transition-all ${isSimulating ? 'opacity-50' : 'hover:bg-[#6366f1]/20 active:scale-95'}`}
+                          >
+                            RUN_{s}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </GlassCard>
                   
-                  <GlassCard className="!p-6 border-[#db00ff]/20 bg-[#db00ff]/5">
-                     <h3 className="text-sm font-black tracking-widest uppercase mb-4">SCENARIO_LOADER</h3>
-                     <div className="grid grid-cols-2 gap-2">
-                        {["HALFTIME", "FIRE_DRILL", "ENTRANCE", "EXIT"].map(s => (
-                          <button key={s} className="py-2.5 rounded border border-white/5 bg-black/40 text-[8px] font-black uppercase tracking-widest hover:border-[#db00ff]/40 transition-all">
-                             LOAD_{s}
-                          </button>
-                        ))}
-                     </div>
+                  <GlassCard className="!p-6 border-[#fcee0a]/20 bg-[#fcee0a]/5">
+                     <h3 className="text-sm font-black tracking-widest uppercase mb-4 text-[#fcee0a]">BULK_INGESTION_ENGINE</h3>
+                     <textarea 
+                        placeholder="NAME, ROLE, LOC..."
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && e.ctrlKey) {
+                            handleCSVUpload(e.currentTarget.value);
+                            e.currentTarget.value = "";
+                          }
+                        }}
+                        className="w-full h-12 bg-black/40 border border-white/10 rounded p-2 text-[8px] font-mono mb-2 focus:border-[#fcee0a] outline-none transition-colors"
+                     />
+                     <p className="text-[7px] font-mono text-white/40 uppercase tracking-widest">CTRL+ENTER to INGEST_STREAM</p>
                   </GlassCard>
                 </div>
               </motion.div>
@@ -331,12 +351,17 @@ export default function AdminHUD() {
                               <motion.div 
                                 initial={{ width: 0 }}
                                 animate={{ width: `${(item.stock / item.capacity) * 100}%` }}
-                                className={`h-full rounded-full ${item.status === 'optimal' ? 'bg-green-400' : item.status === 'low' ? 'bg-orange-400' : 'bg-red-500'}`}
+                                className={`h-full rounded-full ${item.status === 'optimal' ? 'bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]' : item.status === 'low' ? 'bg-orange-400' : 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]'}`}
                               />
                            </div>
-                           <span className="text-[10px] font-mono font-bold w-12 text-right">
-                              {item.stock} / {item.capacity}
-                           </span>
+                           <div className="flex flex-col items-end shrink-0">
+                              <span className="text-[10px] font-mono font-bold">
+                                {item.stock} / {item.capacity}
+                              </span>
+                              <span className="text-[7px] font-mono text-[#fcee0a] animate-pulse">
+                                EXHAUST_IN ~{item.status === 'optimal' ? '120m' : item.status === 'low' ? '35m' : '8m'}
+                              </span>
+                           </div>
                         </div>
                       </div>
                     ))}

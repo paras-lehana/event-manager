@@ -9,7 +9,7 @@ interface GlassCardProps extends React.HTMLAttributes<HTMLDivElement> {
   disableTilt?: boolean;
 }
 
-export function GlassCard({ children, className, glow, disableTilt = false, ...props }: GlassCardProps) {
+export const GlassCard = React.memo(({ children, className, glow, disableTilt = false, ...props }: GlassCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [tiltStyle, setTiltStyle] = useState("");
   const [isHovered, setIsHovered] = useState(false);
@@ -37,6 +37,8 @@ export function GlassCard({ children, className, glow, disableTilt = false, ...p
   return (
     <div
       ref={cardRef}
+      role="region"
+      aria-label="Interactive Command Module"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{ 
@@ -51,7 +53,7 @@ export function GlassCard({ children, className, glow, disableTilt = false, ...p
       {...props}
     >
       {/* Interior ambient hover spotlight */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none bg-gradient-to-br from-[#00f3ff]/10 via-transparent to-purple-500/5" />
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none bg-gradient-to-br from-[#00f3ff]/10 via-transparent to-indigo-500/5" />
       
       {/* Content wrapper to stay above spotlight */}
       <div className="relative z-10 w-full h-full">
@@ -59,4 +61,6 @@ export function GlassCard({ children, className, glow, disableTilt = false, ...p
       </div>
     </div>
   );
-}
+});
+
+GlassCard.displayName = "GlassCard";

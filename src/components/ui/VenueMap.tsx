@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MOCK_STANDS, MOCK_VENUE } from "@/lib/mock-data";
 import { useQueues } from "@/lib/providers";
@@ -10,8 +10,8 @@ function getMarkerColor(type: Stand["type"]): string {
   switch (type) {
     case "food": return "#f59e0b";
     case "beverage": return "#00f3ff";
-    case "merchandise": return "#a855f6";
-    case "restroom": return "#6b7280";
+    case "merchandise": return "#6366f1";
+    case "restroom": return "#94a3b8";
     default: return "#fff";
   }
 }
@@ -32,7 +32,7 @@ interface VenueMapProps {
   crewPositions?: { id: string; name: string; avatar: string; x: number; y: number; color: string }[];
 }
 
-export function VenueMap({ onStandClick, highlightStand, crewPositions }: VenueMapProps) {
+export const VenueMap = React.memo(({ onStandClick, highlightStand, crewPositions }: VenueMapProps) => {
   const [hoveredStand, setHoveredStand] = useState<string | null>(null);
   const [filter, setFilter] = useState<string>("all");
   const { queues } = useQueues();
@@ -129,8 +129,63 @@ export function VenueMap({ onStandClick, highlightStand, crewPositions }: VenueM
           {/* TIER 1: Lower Field Seating */}
           <ellipse 
             cx={cx} cy={cy} rx={rx * 0.52} ry={ry * 0.52} 
-            fill="none" stroke="#db00ff" strokeOpacity="0.15" strokeWidth="15" 
+            fill="none" stroke="#6366f1" strokeOpacity="0.2" strokeWidth="20" 
           />
+
+          {/* SEATING PODS (Generated from Section Data) */}
+          <g className="sections-layer">
+            {MOCK_VENUE.sections.map((sec, i) => {
+              const angle = (i / MOCK_VENUE.sections.length) * 2 * Math.PI - Math.PI / 2;
+              const startAngle = angle - 0.2;
+              const endAngle = angle + 0.2;
+              const rInner = rx * (sec.level === 1 ? 0.45 : 0.65);
+              const rOuter = rx * (sec.level === 1 ? 0.55 : 0.75);
+              
+              const x1 = cx + Math.cos(startAngle) * rInner;
+              const y1 = cy + Math.sin(startAngle) * rInner;
+              const x2 = cx + Math.cos(endAngle) * rInner;
+              const y2 = cy + Math.sin(endAngle) * rInner;
+              const x3 = cx + Math.cos(endAngle) * rOuter;
+              const y3 = cy + Math.sin(endAngle) * rOuter;
+              const x4 = cx + Math.cos(startAngle) * rOuter;
+              const y4 = cy + Math.sin(startAngle) * rOuter;
+
+              return (
+                <motion.path
+                  key={sec.id}
+                  d={`M ${x1} ${y1} A ${rInner} ${rInner} 0 0 1 ${x2} ${y2} L ${x3} ${y3} A ${rOuter} ${rOuter} 0 0 0 ${x4} ${y4} Z`}
+                  fill={sec.level === 1 ? "#6366f1" : "#00f3ff"}
+                  fillOpacity="0.08"
+                  stroke={sec.level === 1 ? "#6366f1" : "#00f3ff"}
+                  strokeOpacity="0.3"
+                  strokeWidth="1"
+                  whileHover={{ fillOpacity: 0.3, strokeOpacity: 0.8 }}
+                  className="cursor-help"
+                />
+              );
+            })}
+          </g>
+
+          {/* CROWD FLOW TRAILS (Dashed interaction lines) */}
+          <g className="flow-layer" style={{ filter: 'blur(1px)' }}>
+            {[0, 1, 2, 3].map(i => {
+              const angle = (i / 4) * 2 * Math.PI;
+              const xStart = cx + Math.cos(angle) * (rx + 40);
+              const yStart = cy + Math.sin(angle) * (ry + 40);
+              return (
+                <path
+                  key={i}
+                  d={`M ${xStart} ${yStart} Q ${cx + Math.cos(angle+0.5)*100} ${cy + Math.sin(angle+0.5)*100} ${cx} ${cy}`}
+                  fill="none"
+                  stroke="#00f3ff"
+                  strokeWidth="1.5"
+                  strokeOpacity="0.3"
+                  strokeDasharray="4 8"
+                  className="animate-flow-dash"
+                />
+              );
+            })}
+          </g>
 
           {/* FIELD */}
           <ellipse 
@@ -307,8 +362,8 @@ export function VenueMap({ onStandClick, highlightStand, crewPositions }: VenueM
         {[
           { color: "#f59e0b", label: "CONCESSIONS", icon: "🍔" },
           { color: "#00f3ff", label: "BEVERAGES", icon: "🍺" },
-          { color: "#6b7280", label: "RESTROOMS", icon: "🚻" },
-          { color: "#db00ff", label: "CREW UNITS", icon: "👥" },
+          { color: "#64748b", label: "RESTROOMS", icon: "🚻" },
+          { color: "#6366f1", label: "FIELD UNITS", icon: "👥" },
         ].map((item) => (
           <div key={item.label} className="bg-black/20 border border-[var(--color-border)] rounded-lg p-2.5 flex items-center gap-3">
             <div className="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-sm border-l-2" style={{ borderColor: item.color }}>
@@ -326,4 +381,6 @@ export function VenueMap({ onStandClick, highlightStand, crewPositions }: VenueM
       </div>
     </div>
   );
-}
+});
+
+VenueMap.displayName = "VenueMap";
