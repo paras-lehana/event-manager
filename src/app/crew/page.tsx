@@ -14,7 +14,8 @@ export default function CrewPage() {
 
   const crewPositions = members.map((m, i) => ({
     id: m.uid,
-    name: m.avatar,
+    name: m.displayName,
+    avatar: m.avatar,
     x: 30 + (i * 15) + Math.random() * 10,
     y: 30 + (i * 12) + Math.random() * 10,
     color: CREW_COLORS[i % CREW_COLORS.length],
