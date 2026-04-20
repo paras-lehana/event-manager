@@ -5,12 +5,13 @@ import gsap from "gsap";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { AIChatPanel } from "@/components/ui/AIChatPanel";
 import { useQueues, useCrew, useOrders, useToast } from "@/lib/providers";
+import { useChat } from "@/app/providers";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
   const gridRef = useRef<HTMLDivElement>(null);
-  const [chatOpen, setChatOpen] = useState(false);
+  const { chatOpen, setChatOpen } = useChat();
   const { queues } = useQueues();
   const { members, crewId } = useCrew();
   const { orders } = useOrders();
@@ -75,32 +76,59 @@ export default function Home() {
       </div>
 
       <div className="max-w-5xl mx-auto px-4 pt-6 pb-24">
-        {/* Header */}
+        {/* Header - Kinetic Typography Overlay */}
         <motion.header
-          initial={{ opacity: 0, y: -15 }}
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6"
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="mb-8 relative"
         >
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#32b8c6] to-[#1a6873] flex items-center justify-center text-base font-black shadow-lg shadow-[#1a6873]/30 text-white">
-              SF
-            </div>
+          <div className="flex items-center gap-4">
+            <motion.div 
+              whileHover={{ rotate: 90, scale: 1.1 }}
+              transition={{ type: "spring", stiffness: 300, damping: 10 }}
+              className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#32b8c6] to-purple-600 flex items-center justify-center text-xl font-black shadow-[0_0_20px_rgba(50,184,198,0.4)] text-white relative overflow-hidden group"
+            >
+              <div className="absolute inset-0 bg-white/20 animate-pulse" />
+              <span className="relative z-10 glitch-text" data-text="SF">SF</span>
+            </motion.div>
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
-                Stadium<span className="text-[#32b8c6]">Flow</span>
+              <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-1 uppercase flex items-center">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/70">Stadium</span>
+                <span className="text-[#32b8c6] ml-1 drop-shadow-[0_0_15px_rgba(50,184,198,0.6)] animate-pulse">Flow</span>
               </h1>
-              <p className="text-xs text-[var(--color-text-secondary)]">
-                SoFi Stadium • Live Now
-              </p>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-green-400 animate-ping" />
+                <p className="text-xs font-mono tracking-widest text-[#32b8c6] uppercase">
+                  SoFi Stadium // Broadcast Live
+                </p>
+              </div>
             </div>
           </div>
         </motion.header>
 
+        {/* Scroll Indicator */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1 }}
+          className="absolute right-4 top-1/2 -translate-y-1/2 hidden lg:flex flex-col items-center gap-2 opacity-50"
+        >
+          <p className="text-[10px] uppercase font-mono tracking-widest rotate-90 mb-8 text-[var(--color-text-secondary)]">Scroll</p>
+          <div className="h-24 w-px bg-gradient-to-b from-transparent via-[#32b8c6] to-transparent relative">
+            <motion.div 
+              animate={{ y: [0, 96, 0] }} 
+              transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+              className="absolute top-0 left-[-1.5px] w-1 h-3 rounded-full bg-[#32b8c6] shadow-[0_0_10px_#32b8c6]" 
+            />
+          </div>
+        </motion.div>
+
         {/* Dashboard Grid */}
-        <div ref={gridRef} className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+        <div ref={gridRef} className="bento-grid">
 
           {/* ─── LIVE GAME BANNER ─── */}
-          <div className="col-span-2 md:col-span-4">
+          <div className="bento-large">
             <GlassCard className="!p-4 flex items-center justify-between bg-gradient-to-r from-[#1a6873]/30 to-purple-900/20">
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
@@ -114,8 +142,46 @@ export default function Home() {
             </GlassCard>
           </div>
 
-          {/* ─── MAP CARD ─── */}
-          <div className="col-span-2 md:col-span-2 row-span-2">
+          {/* ─── USP: REAL-TIME CROWD INTEL ─── */}
+          <div className="bento-wide">
+            <GlassCard className="!p-5 border-[#00f3ff]/40 shadow-[0_0_30px_rgba(0,243,255,0.15)] relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-r from-[#00f3ff]/5 to-[#db00ff]/5 pointer-events-none" />
+              <div className="absolute -right-20 -bottom-20 w-48 h-48 bg-[#00f3ff]/10 rounded-full blur-3xl group-hover:bg-[#db00ff]/20 transition-all duration-700" />
+              
+              <div className="flex items-start justify-between relative z-10">
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-xl">📡</span>
+                    <h2 className="text-lg font-bold text-white tracking-tight">Real-Time Crowd Routing</h2>
+                  </div>
+                  <p className="text-sm text-[var(--color-text-secondary)] max-w-sm mb-4">
+                    StadiumFlow's core USP: Telemetry node networks predict and redirect foot traffic to eliminate waiting times.
+                  </p>
+                  
+                  <div className="flex flex-wrap gap-2 text-[10px] font-mono tracking-widest text-[#00f3ff]">
+                    <span className="px-2 py-1 bg-[#00f3ff]/10 rounded border border-[#00f3ff]/30">SYNC = 500MS</span>
+                    <span className="px-2 py-1 bg-[#db00ff]/10 rounded border border-[#db00ff]/30 text-[#db00ff]">AI LOAD BALANCING</span>
+                  </div>
+                </div>
+                
+                {/* SVG Infographic */}
+                <div className="w-32 h-24 bg-black/40 rounded-xl border border-[var(--color-border)] p-2 relative overflow-hidden flex flex-col justify-end">
+                   <div className="w-full flex items-end justify-between gap-1 h-12">
+                     <motion.div className="w-full bg-[#ff003c] rounded-t-sm" animate={{ height: ["80%", "40%", "15%"] }} transition={{ duration: 3, ease: "easeInOut", repeat: Infinity, repeatType: "mirror" }} />
+                     <motion.div className="w-full bg-[#fcee0a] rounded-t-sm" animate={{ height: ["60%", "30%", "20%"] }} transition={{ delay: 0.5, duration: 3, ease: "easeInOut", repeat: Infinity, repeatType: "mirror" }} />
+                     <motion.div className="w-full bg-[#00f3ff] rounded-t-sm" animate={{ height: ["20%", "70%", "90%"] }} transition={{ delay: 1, duration: 3, ease: "easeInOut", repeat: Infinity, repeatType: "mirror" }} />
+                     <motion.div className="w-full bg-[#00f3ff] rounded-t-sm" animate={{ height: ["10%", "50%", "85%"] }} transition={{ delay: 1.5, duration: 3, ease: "easeInOut", repeat: Infinity, repeatType: "mirror" }} />
+                   </div>
+                   <div className="absolute top-2 left-2 flex items-center gap-1.5">
+                     <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                     <span className="text-[8px] font-mono text-green-400">Congestion Drop</span>
+                   </div>
+                </div>
+              </div>
+            </GlassCard>
+          </div>
+
+          <div className="bento-tall">
             <GlassCard
               className="h-full cursor-pointer !p-4 flex flex-col"
               onClick={() => router.push("/map")}
@@ -158,7 +224,7 @@ export default function Home() {
           </div>
 
           {/* ─── AI ASSISTANT ─── */}
-          <div className="col-span-2 md:col-span-2 row-span-2">
+          <div className="bento-tall">
             <GlassCard glow className="h-full flex flex-col !p-4">
               <div className="flex items-center gap-2 mb-3">
                 <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#32b8c6] to-purple-500 flex items-center justify-center shadow-lg">
@@ -187,6 +253,7 @@ export default function Home() {
               </div>
 
               <button
+                aria-label="Open Gemini Concierge Chat"
                 onClick={() => setChatOpen(true)}
                 className="w-full py-3 bg-gradient-to-r from-[#21808d] to-purple-600 text-white font-semibold rounded-xl hover:from-[#1d7480] hover:to-purple-700 transition-all shadow-lg shadow-[#1a6873]/20 active:scale-[0.98] text-sm"
               >
@@ -196,7 +263,7 @@ export default function Home() {
           </div>
 
           {/* ─── FASTEST QUEUE ─── */}
-          <div className="col-span-1">
+          <div className="bento-small">
             <GlassCard className="h-full cursor-pointer !p-4" onClick={() => router.push("/order")}>
               <h3 className="text-[10px] font-bold text-[var(--color-text-secondary)] uppercase tracking-wider mb-2">
                 ⚡ Fastest Now
@@ -217,7 +284,7 @@ export default function Home() {
           </div>
 
           {/* ─── SLASH ALERTS ─── */}
-          <div className="col-span-1">
+          <div className="bento-small">
             <GlassCard className="h-full !p-4 flex flex-col items-center justify-center text-center">
               <motion.div
                 animate={{ scale: [1, 1.15, 1] }}
@@ -238,8 +305,8 @@ export default function Home() {
           </div>
 
           {/* ─── QUEUE TIMES ─── */}
-          <div className="col-span-2 md:col-span-2">
-            <GlassCard className="!p-4">
+          <div className="bento-wide">
+            <GlassCard className="!p-4" aria-live="polite" aria-atomic="true">
               <h3 className="text-[10px] font-bold text-[var(--color-text-secondary)] uppercase tracking-wider mb-3">
                 🍽️ Concession Wait Times
               </h3>
@@ -267,8 +334,8 @@ export default function Home() {
           </div>
 
           {/* ─── RESTROOMS ─── */}
-          <div className="col-span-1">
-            <GlassCard className="!p-4">
+          <div className="bento-small">
+            <GlassCard className="!p-4 h-full">
               <h3 className="text-[10px] font-bold text-[var(--color-text-secondary)] uppercase tracking-wider mb-3">
                 🚻 Restrooms
               </h3>
@@ -286,7 +353,7 @@ export default function Home() {
           </div>
 
           {/* ─── ACTIVE ORDERS ─── */}
-          <div className="col-span-1">
+          <div className="bento-small">
             <GlassCard
               glow={activeOrders.some((o) => o.status === "ready")}
               className="!p-4 cursor-pointer h-full"
@@ -323,9 +390,9 @@ export default function Home() {
             </GlassCard>
           </div>
 
-          {/* ─── AR STATS OVERLAY (from research) ─── */}
-          <div className="col-span-2 md:col-span-2">
-            <GlassCard className="!p-4 bg-gradient-to-r from-purple-900/20 to-[#1a6873]/20">
+          {/* ─── AR STATS OVERLAY ─── */}
+          <div className="bento-wide">
+            <GlassCard className="!p-4 mesh-gradient border-none">
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-lg">📊</span>
                 <h3 className="text-sm font-bold text-white">AR Stats Overlay</h3>
@@ -354,8 +421,8 @@ export default function Home() {
           </div>
 
           {/* ─── QUICK ACTIONS ─── */}
-          <div className="col-span-2 md:col-span-2">
-            <GlassCard className="!p-4">
+          <div className="bento-wide">
+            <GlassCard className="!p-4 h-full">
               <h3 className="text-[10px] font-bold text-[var(--color-text-secondary)] uppercase tracking-wider mb-3">
                 Quick Actions
               </h3>
@@ -367,6 +434,7 @@ export default function Home() {
                 ].map((action) => (
                   <button
                     key={action.label}
+                    aria-label={action.label}
                     onClick={() => router.push(action.path)}
                     className="flex flex-col items-center gap-1.5 py-3 rounded-xl bg-white/5 border border-[var(--color-border)] hover:border-[#32b8c6]/50 hover:bg-white/8 transition-all active:scale-95"
                   >
@@ -379,7 +447,7 @@ export default function Home() {
           </div>
 
           {/* ─── FIND MY CREW ─── */}
-          <div className="col-span-2 md:col-span-4">
+          <div className="bento-large">
             <GlassCard
               className="!p-4 flex items-center justify-between cursor-pointer"
               onClick={() => router.push("/crew")}
@@ -418,21 +486,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Floating AI Button */}
-      {!chatOpen && (
-        <motion.button
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => setChatOpen(true)}
-          className="fixed bottom-20 right-4 w-14 h-14 rounded-full bg-gradient-to-br from-[#32b8c6] to-purple-500 flex items-center justify-center text-2xl shadow-2xl shadow-[#1a6873]/40 z-50"
-        >
-          ✨
-        </motion.button>
-      )}
-
-      <AIChatPanel isOpen={chatOpen} onClose={() => setChatOpen(false)} />
     </main>
   );
 }

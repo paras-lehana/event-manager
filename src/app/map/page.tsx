@@ -28,7 +28,7 @@ export default function MapPage() {
           <StandMenu stand={selectedStand} onBack={() => setSelectedStand(null)} />
         ) : (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <GlassCard>
+            <GlassCard disableTilt>
               <VenueMap
                 onStandClick={(stand) => setSelectedStand(stand)}
                 highlightStand={null}

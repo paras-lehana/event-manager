@@ -1,6 +1,6 @@
-# StadiumFlow 🏟️
+# StadiumFlow (Event Manager) v1.0 🏟️
 
-**A hyper-personalized, real-time stadium experience portal that eliminates wait times, coordinates crews, and brings AI-powered concierge assistance to 100,000-seat venues.**
+**A hyper-personalized, real-time stadium experience portal. Publicly hosted at [eventops.lehana.in](https://eventops.lehana.in).**
 
 ## Problem
 
@@ -71,35 +71,45 @@ Copy `.env.example` to `.env` and fill in your keys. The app runs in full demo m
 ## Project Structure
 
 ```
-src/
-├── app/
-│   ├── layout.tsx          # Root layout with SEO metadata
-│   ├── providers.tsx       # All context providers composed
-│   ├── page.tsx            # Dashboard (Bento Grid homepage)
-│   ├── map/page.tsx        # Interactive venue map
-│   ├── order/page.tsx      # Concession stand browser & ordering
-│   ├── crew/page.tsx       # Find My Crew location sharing
-│   └── orders/page.tsx     # Order tracking & QR pickup
-├── components/
-│   ├── layout/
-│   │   └── BottomNav.tsx   # Mobile navigation bar
-│   └── ui/
-│       ├── GlassCard.tsx       # Glassmorphism card component
-│       ├── VenueMap.tsx        # Canvas-based stadium map
-│       ├── QueueDashboard.tsx  # Live queue trackers
-│       ├── StandMenu.tsx       # Concession menu + cart
-│       ├── AIChatPanel.tsx     # Gemini AI slide-over chat
-│       └── ToastContainer.tsx  # Notification toasts
-├── lib/
-│   ├── firebase.ts         # Firebase initialization (lazy singleton)
-│   ├── gemini.ts           # Gemini AI + Function Calling + local fallback
-│   ├── mock-data.ts        # Full mock: venue, stands, menus, queues
-│   ├── providers.tsx       # React contexts (Queue, Cart, Orders, Crew, Toast, Venue)
-│   └── types.ts            # All TypeScript interfaces
-├── Dockerfile              # Multi-stage production build
-├── docker-compose.yml      # Container orchestration
-└── MANUAL_TODO.md          # API key setup instructions
-```
+## 📁 File Index
+
+### 📄 Documentation Files
+| File | Purpose | When to Read |
+|------|---------|--------------|
+| `README.md` | **START HERE** - Project overview | First stop for understanding |
+| `CHANGELOG.md` | Version history | Check for updates/fixes |
+| `HACKATHON.md` | Hackathon-specific context | Original project goals |
+| `MANUAL_TODO.md` | API key setup instructions | When configuring production keys |
+
+### 💻 Application Code (src/)
+| File/Dir | Purpose | Key Components |
+|----------|---------|----------------|
+| `src/app/` | App Router pages | `page.tsx` (Dashboard), `map/`, `order/` |
+| `src/components/` | Reusable UI components | `GlassCard.tsx`, `VenueMap.tsx` |
+| `src/lib/` | Core logic and utilities | `firebase.ts`, `gemini.ts`, `mock-data.ts` |
+| `src/lib/providers.tsx` | State management | Queue, Cart, Orders contexts |
+
+### ⚙️ Configuration & DevOps
+| File | Purpose | What It Configures |
+|------|---------|-------------------|
+| `docker-compose.yml` | Container orchestration | Deployment labels, networks |
+| `Dockerfile` | Build instructions | Multi-stage production build |
+| `version.js` | Version constant | Single source of truth for version |
+| `package.json` | Dependencies | npm packages & scripts |
+
+### 📂 Directories
+| Directory | Purpose | Contents |
+|-----------|---------|----------|
+| `public/` | Static assets | Icons, images |
+| `docs/` | Planning & testing docs | System design, test strategy |
+
+## Deployment & Hosting
+
+This application is hosted on the **Lehana.in Hybrid Cloud**:
+- **Host Node**: `lehana-rig` (home lab)
+- **Public Entry**: VPS (`eventops.lehana.in`) via Traefik forwarding
+- **Docker Home**: `/root/docker/event-manager/`
+- **Code Home**: `/root/code/frontend/event-manager/`
 
 ## Accessibility
 

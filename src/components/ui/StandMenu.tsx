@@ -71,17 +71,19 @@ export function StandMenu({ stand, onBack }: StandMenuProps) {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
-            className="text-center py-8"
+            className="text-center py-12"
           >
-            <motion.span
-              className="text-6xl block mb-4"
-              animate={{ rotate: [0, 10, -10, 10, 0], scale: [1, 1.2, 1] }}
-              transition={{ duration: 0.6 }}
-            >
-              🎉
-            </motion.span>
-            <h3 className="text-xl font-bold text-white">Order Placed!</h3>
-            <p className="text-sm text-[var(--color-text-secondary)] mt-1">Estimated ready in ~10 minutes</p>
+            <GlassCard className="mesh-gradient !border-[#32b8c6]/30 inline-block !p-8">
+              <motion.span
+                className="text-7xl block mb-6 drop-shadow-[0_0_20px_rgba(50,184,198,0.5)]"
+                animate={{ rotate: [0, 15, -15, 10, -10, 0], scale: [1, 1.3, 1] }}
+                transition={{ duration: 0.8 }}
+              >
+                🎉
+              </motion.span>
+              <h3 className="text-2xl font-black text-white glow-teal">Order Placed!</h3>
+              <p className="text-sm text-[var(--color-text-secondary)] mt-2 font-medium">Estimated ready in ~10 minutes</p>
+            </GlassCard>
           </motion.div>
         )}
       </AnimatePresence>
@@ -96,19 +98,31 @@ export function StandMenu({ stand, onBack }: StandMenuProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}
             >
-              <GlassCard className="flex items-center justify-between !p-4">
-                <div className="flex-1">
-                  <h4 className="font-semibold text-white">{item.name}</h4>
-                  <p className="text-xs text-[var(--color-text-secondary)] mt-0.5">{item.description}</p>
-                  <p className="text-sm font-bold text-[var(--color-teal-300)] mt-1">${item.price.toFixed(2)}</p>
+              <GlassCard className="flex items-center justify-between !p-0 overflow-hidden group">
+                <div className="w-24 h-24 bg-[#1a1c1c] border-r border-[var(--color-border)] relative overflow-hidden flex-shrink-0 flex items-center justify-center text-4xl">
+                  {/* Cinematic gradient background behind placeholder */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-[#32b8c6]/20 to-purple-500/20 group-hover:scale-125 transition-transform duration-700 ease-out" />
+                  <span className="relative z-10 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 ease-out">
+                    {item.name.toLowerCase().includes("burger") ? "🍔" : 
+                     item.name.toLowerCase().includes("beer") ? "🍺" : 
+                     item.name.toLowerCase().includes("dog") ? "🌭" : 
+                     item.name.toLowerCase().includes("nachos") ? "🧀" : "🍽️"}
+                  </span>
                 </div>
-                <button
-                  onClick={() => handleAddItem(item)}
-                  disabled={!item.available}
-                  className="ml-4 w-10 h-10 rounded-full bg-[var(--color-teal-500)] text-white flex items-center justify-center hover:bg-[var(--color-teal-600)] disabled:opacity-30 transition-all hover:scale-110 active:scale-95 text-lg"
-                >
-                  +
-                </button>
+                <div className="flex-1 p-4">
+                  <h4 className="font-semibold text-white group-hover:text-[#32b8c6] transition-colors">{item.name}</h4>
+                  <p className="text-xs text-[var(--color-text-secondary)] mt-0.5 line-clamp-2">{item.description}</p>
+                  <p className="text-sm font-bold text-[#32b8c6] mt-1">${item.price.toFixed(2)}</p>
+                </div>
+                <div className="p-4 flex-shrink-0">
+                  <button
+                    onClick={() => handleAddItem(item)}
+                    disabled={!item.available}
+                    className="magnetic-btn w-11 h-11 rounded-full bg-gradient-to-br from-[#21808d] to-[#1a6873] border border-[#32b8c6]/30 text-white flex items-center justify-center hover:shadow-[0_0_20px_rgba(50,184,198,0.5)] disabled:opacity-30 transition-all hover:scale-110 active:scale-90 text-xl font-bold"
+                  >
+                    +
+                  </button>
+                </div>
               </GlassCard>
             </motion.div>
           ))}
@@ -135,15 +149,25 @@ export function StandMenu({ stand, onBack }: StandMenuProps) {
         )}
       </AnimatePresence>
 
-      {/* Checkout panel */}
+      {/* Checkout panel with heavy blur overlay */}
       <AnimatePresence>
         {showCheckout && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/60 backdrop-blur-xl"
+            onClick={() => setShowCheckout(false)}
           >
-            <GlassCard glow>
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="w-full max-w-lg mb-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <GlassCard glow className="shadow-[0_0_50px_rgba(0,0,0,0.5)] !p-6 border-t border-white/20">
               <h3 className="font-bold text-lg text-white mb-4">Your Order</h3>
               <div className="space-y-2 mb-4">
                 {items.map((ci) => (
@@ -153,25 +177,26 @@ export function StandMenu({ stand, onBack }: StandMenuProps) {
                   </div>
                 ))}
               </div>
-              <div className="flex justify-between font-bold text-white border-t border-[var(--color-border)] pt-3">
+              <div className="flex justify-between font-bold text-white border-t border-dashed border-[var(--color-border)] pt-4 mt-2 text-lg">
                 <span>Total</span>
-                <span className="text-[var(--color-teal-300)]">${total.toFixed(2)}</span>
+                <span className="text-[#32b8c6] drop-shadow-[0_0_8px_rgba(50,184,198,0.5)]">${total.toFixed(2)}</span>
               </div>
-              <div className="flex gap-3 mt-4">
+              <div className="flex gap-3 mt-6">
                 <button
                   onClick={() => { clearCart(); setShowCheckout(false); }}
-                  className="flex-1 py-3 border border-[var(--color-border)] rounded-xl text-[var(--color-text-secondary)] hover:bg-white/5 transition-colors"
+                  className="flex-1 py-3.5 rounded-xl text-[var(--color-text-secondary)] border border-[var(--color-border)] hover:bg-white/5 transition-all text-sm font-semibold"
                 >
-                  Clear
+                  Cancel
                 </button>
                 <button
                   onClick={handlePlaceOrder}
-                  className="flex-1 py-3 bg-[var(--color-teal-500)] text-white rounded-xl font-bold hover:bg-[var(--color-teal-600)] transition-colors"
+                  className="magnetic-btn flex-[2] py-3.5 bg-gradient-to-r from-[#21808d] to-purple-600 text-white rounded-xl font-bold hover:shadow-[0_0_20px_rgba(50,184,198,0.5)] transition-all active:scale-95"
                 >
-                  Place Order 🚀
+                  Authorize Checkout 🚀
                 </button>
               </div>
             </GlassCard>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
