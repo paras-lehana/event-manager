@@ -11,9 +11,9 @@ export default function MapPage() {
   const [selectedStand, setSelectedStand] = useState<Stand | null>(null);
 
   const crewPositions = [
-    { id: "u1", name: "AJ", x: 35, y: 30, color: "#db00ff" },
-    { id: "u2", name: "MK", x: 65, y: 35, color: "#a855f6" },
-    { id: "u3", name: "DS", x: 40, y: 70, color: "#f97316" },
+    { id: "u1", name: "AJ", avatar: "AJ", x: 35, y: 30, color: "#db00ff" },
+    { id: "u2", name: "MK", avatar: "MK", x: 65, y: 35, color: "#a855f6" },
+    { id: "u3", name: "DS", avatar: "DS", x: 40, y: 70, color: "#f97316" },
   ];
 
   return (
