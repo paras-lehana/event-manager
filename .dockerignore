@@ -1,0 +1,14 @@
+node_modules
+.next
+.git
+.gitignore
+*.md
+Dockerfile
+docker-compose.yml
+# package-lock.json  <-- DONT IGNORE THIS, NEEDED FOR BUILD
+AGENTS.md
+MANUAL_TODO.md
+CHANGELOG.md
+AGENTS.md
+*.test.ts
+tests
