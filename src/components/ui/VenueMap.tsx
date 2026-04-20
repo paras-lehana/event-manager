@@ -9,7 +9,7 @@ import { Stand } from "@/lib/types";
 function getMarkerColor(type: Stand["type"]): string {
   switch (type) {
     case "food": return "#f59e0b";
-    case "beverage": return "#32b8c6";
+    case "beverage": return "#00f3ff";
     case "merchandise": return "#a855f6";
     case "restroom": return "#6b7280";
     default: return "#fff";
@@ -52,7 +52,7 @@ export function VenueMap({ onStandClick, highlightStand, crewPositions }: VenueM
     ctx.clearRect(0, 0, width, height);
 
     // Background
-    ctx.fillStyle = "#13343b";
+    ctx.fillStyle = "#0a1128";
     ctx.fillRect(0, 0, width, height);
 
     // Stadium oval
@@ -192,7 +192,7 @@ export function VenueMap({ onStandClick, highlightStand, crewPositions }: VenueM
                 <motion.div
                   initial={{ opacity: 0, y: 5 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-[#1a1c1c] border border-[var(--color-border)] rounded-lg px-3 py-2 whitespace-nowrap z-10 shadow-xl"
+                  className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-[#111424] border border-[var(--color-border)] rounded-lg px-3 py-2 whitespace-nowrap z-10 shadow-xl"
                 >
                   <p className="text-sm font-bold text-white">{stand.name}</p>
                   {queue && (

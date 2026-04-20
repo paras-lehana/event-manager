@@ -47,7 +47,7 @@ function Particles() {
       </bufferGeometry>
       <pointsMaterial
         size={0.06}
-        color="#32b8c6"
+        color="#00f3ff"
         transparent
         opacity={0.6}
         blending={THREE.AdditiveBlending}

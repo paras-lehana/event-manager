@@ -44,14 +44,14 @@ export function GlassCard({ children, className, glow, disableTilt = false, ...p
         transition: isHovered ? "none" : "transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)" 
       }}
       className={`glass-card relative overflow-hidden p-6 
-      hover:shadow-2xl hover:shadow-[#32b8c6]/20
+      hover:shadow-2xl hover:shadow-[#00f3ff]/20
       group
-      ${glow ? "shadow-[0_0_40px_rgba(50,184,198,0.2)] border-[#32b8c6]/30" : ""} 
+      ${glow ? "shadow-[0_0_40px_rgba(50,184,198,0.2)] border-[#00f3ff]/30" : ""} 
       ${className || ""}`}
       {...props}
     >
       {/* Interior ambient hover spotlight */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none bg-gradient-to-br from-[#32b8c6]/10 via-transparent to-purple-500/5" />
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none bg-gradient-to-br from-[#00f3ff]/10 via-transparent to-purple-500/5" />
       
       {/* Content wrapper to stay above spotlight */}
       <div className="relative z-10 w-full h-full">

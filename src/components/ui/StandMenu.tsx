@@ -73,7 +73,7 @@ export function StandMenu({ stand, onBack }: StandMenuProps) {
             exit={{ opacity: 0, scale: 0.8 }}
             className="text-center py-12"
           >
-            <GlassCard className="mesh-gradient !border-[#32b8c6]/30 inline-block !p-8">
+            <GlassCard className="mesh-gradient !border-[#00f3ff]/30 inline-block !p-8">
               <motion.span
                 className="text-7xl block mb-6 drop-shadow-[0_0_20px_rgba(50,184,198,0.5)]"
                 animate={{ rotate: [0, 15, -15, 10, -10, 0], scale: [1, 1.3, 1] }}
@@ -99,9 +99,9 @@ export function StandMenu({ stand, onBack }: StandMenuProps) {
               transition={{ delay: i * 0.05 }}
             >
               <GlassCard className="flex items-center justify-between !p-0 overflow-hidden group">
-                <div className="w-24 h-24 bg-[#1a1c1c] border-r border-[var(--color-border)] relative overflow-hidden flex-shrink-0 flex items-center justify-center text-4xl">
+                <div className="w-24 h-24 bg-[#111424] border-r border-[var(--color-border)] relative overflow-hidden flex-shrink-0 flex items-center justify-center text-4xl">
                   {/* Cinematic gradient background behind placeholder */}
-                  <div className="absolute inset-0 bg-gradient-to-tr from-[#32b8c6]/20 to-purple-500/20 group-hover:scale-125 transition-transform duration-700 ease-out" />
+                  <div className="absolute inset-0 bg-gradient-to-tr from-[#00f3ff]/20 to-purple-500/20 group-hover:scale-125 transition-transform duration-700 ease-out" />
                   <span className="relative z-10 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 ease-out">
                     {item.name.toLowerCase().includes("burger") ? "🍔" : 
                      item.name.toLowerCase().includes("beer") ? "🍺" : 
@@ -110,15 +110,15 @@ export function StandMenu({ stand, onBack }: StandMenuProps) {
                   </span>
                 </div>
                 <div className="flex-1 p-4">
-                  <h4 className="font-semibold text-white group-hover:text-[#32b8c6] transition-colors">{item.name}</h4>
+                  <h4 className="font-semibold text-white group-hover:text-[#00f3ff] transition-colors">{item.name}</h4>
                   <p className="text-xs text-[var(--color-text-secondary)] mt-0.5 line-clamp-2">{item.description}</p>
-                  <p className="text-sm font-bold text-[#32b8c6] mt-1">${item.price.toFixed(2)}</p>
+                  <p className="text-sm font-bold text-[#00f3ff] mt-1">${item.price.toFixed(2)}</p>
                 </div>
                 <div className="p-4 flex-shrink-0">
                   <button
                     onClick={() => handleAddItem(item)}
                     disabled={!item.available}
-                    className="magnetic-btn w-11 h-11 rounded-full bg-gradient-to-br from-[#21808d] to-[#1a6873] border border-[#32b8c6]/30 text-white flex items-center justify-center hover:shadow-[0_0_20px_rgba(50,184,198,0.5)] disabled:opacity-30 transition-all hover:scale-110 active:scale-90 text-xl font-bold"
+                    className="magnetic-btn w-11 h-11 rounded-full bg-gradient-to-br from-[#db00ff] to-[#9000c7] border border-[#00f3ff]/30 text-white flex items-center justify-center hover:shadow-[0_0_20px_rgba(50,184,198,0.5)] disabled:opacity-30 transition-all hover:scale-110 active:scale-90 text-xl font-bold"
                   >
                     +
                   </button>
@@ -179,7 +179,7 @@ export function StandMenu({ stand, onBack }: StandMenuProps) {
               </div>
               <div className="flex justify-between font-bold text-white border-t border-dashed border-[var(--color-border)] pt-4 mt-2 text-lg">
                 <span>Total</span>
-                <span className="text-[#32b8c6] drop-shadow-[0_0_8px_rgba(50,184,198,0.5)]">${total.toFixed(2)}</span>
+                <span className="text-[#00f3ff] drop-shadow-[0_0_8px_rgba(50,184,198,0.5)]">${total.toFixed(2)}</span>
               </div>
               <div className="flex gap-3 mt-6">
                 <button
@@ -190,7 +190,7 @@ export function StandMenu({ stand, onBack }: StandMenuProps) {
                 </button>
                 <button
                   onClick={handlePlaceOrder}
-                  className="magnetic-btn flex-[2] py-3.5 bg-gradient-to-r from-[#21808d] to-purple-600 text-white rounded-xl font-bold hover:shadow-[0_0_20px_rgba(50,184,198,0.5)] transition-all active:scale-95"
+                  className="magnetic-btn flex-[2] py-3.5 bg-gradient-to-r from-[#db00ff] to-purple-600 text-white rounded-xl font-bold hover:shadow-[0_0_20px_rgba(50,184,198,0.5)] transition-all active:scale-95"
                 >
                   Authorize Checkout 🚀
                 </button>

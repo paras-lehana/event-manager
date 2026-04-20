@@ -111,7 +111,7 @@ export function AIChatPanel({ isOpen, onClose, isSidePane = false }: { isOpen: b
             className={
               isSidePane
                 ? "h-full w-full bg-[#111424] flex flex-col z-[101]"
-                : "fixed right-4 bottom-24 h-[600px] max-h-[80vh] w-[calc(100%-2rem)] max-w-md bg-[#1a1c1c]/95 backdrop-blur-xl border border-[var(--color-border)] rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] z-[101] flex flex-col overflow-hidden"
+                : "fixed right-4 bottom-24 h-[600px] max-h-[80vh] w-[calc(100%-2rem)] max-w-md bg-[#111424]/95 backdrop-blur-xl border border-[var(--color-border)] rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] z-[101] flex flex-col overflow-hidden"
             }
           >
             {/* Header */}
@@ -132,7 +132,7 @@ export function AIChatPanel({ isOpen, onClose, isSidePane = false }: { isOpen: b
                         <feComposite in="SourceGraphic" in2="blur" operator="over" />
                       </filter>
                       <linearGradient id="orbGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#32b8c6" />
+                        <stop offset="0%" stopColor="#00f3ff" />
                         <stop offset="50%" stopColor="#a855f6" />
                         <stop offset="100%" stopColor="#3b82f6" />
                       </linearGradient>
@@ -165,9 +165,9 @@ export function AIChatPanel({ isOpen, onClose, isSidePane = false }: { isOpen: b
             <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 scroll-smooth">
               {messages.length === 0 && (
                 <div className="text-center py-8">
-                  <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-[#32b8c6]/10 to-purple-500/10 flex items-center justify-center relative">
+                  <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-[#00f3ff]/10 to-purple-500/10 flex items-center justify-center relative">
                      <svg width="80" height="80" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="absolute">
-                      <circle cx="50" cy="50" r="45" fill="none" stroke="#32b8c6" strokeWidth="1" strokeDasharray="10 15" opacity="0.5">
+                      <circle cx="50" cy="50" r="45" fill="none" stroke="#00f3ff" strokeWidth="1" strokeDasharray="10 15" opacity="0.5">
                         <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="-360 50 50" dur="20s" repeatCount="indefinite" />
                       </circle>
                     </svg>
@@ -221,14 +221,14 @@ export function AIChatPanel({ isOpen, onClose, isSidePane = false }: { isOpen: b
                   <div
                     className={`max-w-[85%] px-5 py-3.5 text-sm leading-relaxed shadow-lg ${
                       msg.role === "user"
-                        ? "bg-gradient-to-br from-[#21808d] to-[#1a6873] text-white rounded-2xl rounded-br-sm glow-teal"
+                        ? "bg-gradient-to-br from-[#db00ff] to-[#9000c7] text-white rounded-2xl rounded-br-sm glow-teal"
                         : "glass-card text-[var(--color-text)] rounded-2xl rounded-bl-sm border border-[var(--color-border)]"
                     }`}
                   >
                     <div>{renderMarkdown(msg.content)}</div>
                     {msg.functionCall && (
-                      <div className="mt-3 p-2 bg-[#1f2121]/50 border border-[#32b8c6]/30 rounded-lg text-xs text-[#32b8c6] flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 bg-[#32b8c6] rounded-full animate-pulse" />
+                      <div className="mt-3 p-2 bg-[var(--background)]/50 border border-[#00f3ff]/30 rounded-lg text-xs text-[#00f3ff] flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 bg-[#00f3ff] rounded-full animate-pulse" />
                         Executed: {msg.functionCall.name}()
                       </div>
                     )}
@@ -240,7 +240,7 @@ export function AIChatPanel({ isOpen, onClose, isSidePane = false }: { isOpen: b
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex justify-start">
                   <div className="glass-card rounded-2xl rounded-bl-md px-5 py-3.5 flex items-center gap-3">
                     <div className="flex gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#32b8c6] animate-bounce" style={{ animationDelay: "0ms" }} />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#00f3ff] animate-bounce" style={{ animationDelay: "0ms" }} />
                       <span className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-bounce" style={{ animationDelay: "150ms" }} />
                       <span className="w-1.5 h-1.5 rounded-full bg-[#3b82f6] animate-bounce" style={{ animationDelay: "300ms" }} />
                     </div>
@@ -259,12 +259,12 @@ export function AIChatPanel({ isOpen, onClose, isSidePane = false }: { isOpen: b
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                   placeholder="Ask Gemini anything..."
-                  className="flex-1 bg-[#1a1c1c] border border-[var(--color-border)] rounded-xl px-4 py-3.5 text-sm text-white placeholder-[var(--color-text-secondary)] focus:outline-none focus:border-[#32b8c6] focus:ring-1 focus:ring-[#32b8c6]/50 transition-all shadow-inner"
+                  className="flex-1 bg-[#111424] border border-[var(--color-border)] rounded-xl px-4 py-3.5 text-sm text-white placeholder-[var(--color-text-secondary)] focus:outline-none focus:border-[#00f3ff] focus:ring-1 focus:ring-[#00f3ff]/50 transition-all shadow-inner"
                 />
                 <button
                   onClick={sendMessage}
                   disabled={isLoading || !input.trim()}
-                  className="magnetic-btn px-5 py-3.5 bg-gradient-to-r from-[#21808d] to-purple-600 text-white rounded-xl font-bold hover:shadow-[0_0_15px_rgba(50,184,198,0.4)] disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-95"
+                  className="magnetic-btn px-5 py-3.5 bg-gradient-to-r from-[#db00ff] to-purple-600 text-white rounded-xl font-bold hover:shadow-[0_0_15px_rgba(50,184,198,0.4)] disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-95"
                 >
                   Send
                 </button>
