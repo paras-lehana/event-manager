@@ -27,10 +27,11 @@ Current solutions (venue apps, digital signage) are passive and fragmented. No e
 StadiumFlow is a **hyper-personalized, mobile-first web portal** that acts as a real-time digital twin of the physical venue. It combines:
 
 1. **Spatial Intelligence** — Interactive venue map with live crowd density overlays
-2. **Predictive Crowd Management** — AI-driven alerts when queue times drop below thresholds
-3. **Frictionless Commerce** — Skip-the-line mobile ordering with optimistic UI
-4. **Social Coordination** — Real-time crew location sharing on the venue map
-5. **Agentic AI Concierge** — Gemini-powered assistant with function calling for hands-free venue interaction
+2. **Operations HUD** — A high-fidelity admin dashboard for real-time crowd simulation and inventory management
+3. **Predictive Crowd Management** — AI-driven alerts when queue times drop below thresholds
+4. **Frictionless Commerce** — Skip-the-line mobile ordering with optimistic UI
+5. **Social Coordination** — Real-time crew location sharing on the venue map
+6. **Agentic AI Concierge** — Gemini-powered assistant with function calling for hands-free venue interaction
 
 ---
 
@@ -96,11 +97,11 @@ Animated, color-coded progress bars tracking every concession and restroom in th
 | **Gemini 1.5 Flash** | Agentic AI with function calling for natural language venue control | Core |
 
 ### Design System (2026 Standards)
-- **Aesthetic**: Dark-mode Glassmorphism with teal/purple gradient accents
-- **Layout**: 6-column Bento Grid (responsive to 2-column mobile)
-- **Typography**: Geist Sans (headings), Geist Mono (data)
-- **Animations**: GSAP ScrollTrigger, Framer Motion layout animations
-- **Accessibility**: WCAG 2.2 AA, 44px touch targets, 4.5:1 contrast ratios
+- **Aesthetic**: "Next-Gen Cyberpunk HUD" — featuring scanline overlays, neon accents (#00f3ff, #db00ff), and high-density data visualizations.
+- **Layout**: 4-column Bento Grid optimized for information density and spatial awareness.
+- **Typography**: Geist Sans (headings), Geist Mono (telemetry and data readouts).
+- **Animations**: GSAP radar sweeps, Framer Motion transitions, and CSS-based neon glow effects.
+- **Accessibility**: WCAG 2.2 AA compliant with ARIA roles, focus management, and 4.5:1 contrast ratios.
 
 ---
 

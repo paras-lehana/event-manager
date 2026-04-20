@@ -1,8 +1,8 @@
 {
   "rules": {
     "queues": {
-      ".read": true, // Publicly readable for real-time dashboards
-      ".write": false, // Only telemetry backend nodes can write
+      ".read": true,
+      ".write": false, 
       "$standId": {
         ".validate": "newData.hasChildren(['estimatedWaitMin', 'queueLength', 'lastUpdated'])",
         "estimatedWaitMin": {
@@ -10,12 +10,15 @@
         },
         "queueLength": {
           ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "velocity": {
+          ".validate": "newData.isNumber()"
         }
       }
     },
     "presence": {
+      ".read": "auth != null",
       "$crewId": {
-        ".read": "auth != null",
         "$userId": {
           ".write": "auth != null && $userId === auth.uid",
           ".validate": "newData.hasChildren(['lat', 'lng', 'lastSeen'])"

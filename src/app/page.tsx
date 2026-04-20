@@ -87,310 +87,459 @@ export default function Home() {
             <div className="flex items-center gap-4">
               <motion.div 
                 whileHover={{ rotate: 90, scale: 1.1 }}
+                onClick={() => router.push("/admin")}
                 transition={{ type: "spring", stiffness: 300, damping: 10 }}
-                className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#00f3ff] to-[#db00ff] flex items-center justify-center text-lg font-black text-white relative overflow-hidden"
+                className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#00f3ff] to-[#db00ff] flex items-center justify-center text-lg font-black text-white relative overflow-hidden cursor-pointer group"
               >
-                <div className="absolute inset-0 bg-white/10 animate-pulse" />
+                <div className="absolute inset-0 bg-white/10 group-hover:bg-white/30 transition-colors animate-pulse" />
                 <span className="relative z-10 glitch-text" data-text="SF">SF</span>
+                <div className="absolute inset-0 flex items-center justify-center translate-y-full group-hover:translate-y-0 bg-black/80 transition-transform duration-200">
+                  <span className="text-[8px] font-mono font-black">ADMIN</span>
+                </div>
               </motion.div>
               <div>
                 <h1 className="text-3xl md:text-5xl font-black tracking-tighter uppercase">
                   <span className="text-white">STADIUM</span>
-                  <span className="text-[#00f3ff] neon-text ml-1">FLOW</span>
+                  <span className="text-[#00f3ff] neon-text ml-1 font-outline">FLOW</span>
                 </h1>
                 <div className="flex items-center gap-2 mt-0.5">
                   <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-ping" />
-                  <p className="text-[10px] font-mono tracking-[0.2em] text-[var(--color-text-secondary)] uppercase">
-                    SoFi Stadium ⁄⁄ Live Feed
+                  <p className="text-[10px] font-mono tracking-[0.2em] text-[#00f3ff]/60 uppercase">
+                    SoFi Stadium ⁄⁄ <span className="text-[8px] opacity-40">NODE_ID: 767-171-449</span>
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Fan Level Badge */}
             <div className="hidden md:flex items-center gap-3">
               <div className="text-right">
-                <p className="data-label">Fan Level</p>
-                <p className="text-lg font-black text-[#fcee0a] data-value">LV.7</p>
+                <p className="data-label text-[10px] opacity-40">AUTH_SESSION</p>
+                <p className="text-lg font-black text-[#fcee0a] data-value">LEVEL_07</p>
               </div>
-              <div className="w-12 h-12 rounded-lg border border-[#fcee0a]/30 bg-[#fcee0a]/5 flex items-center justify-center">
-                <span className="text-2xl">🏆</span>
+              <div className="w-12 h-12 rounded-lg border-2 border-[#fcee0a]/30 bg-[#fcee0a]/5 flex items-center justify-center shadow-[0_0_20px_rgba(252,238,10,0.1)]">
+                <span className="text-2xl drop-shadow-md">🏆</span>
               </div>
             </div>
           </div>
 
-          {/* XP Progress Bar */}
-          <div className="mt-4 flex items-center gap-3">
-            <span className="data-label text-[#00f3ff]">XP</span>
-            <div className="xp-bar flex-1">
-              <div className="xp-bar-fill" style={{ width: "72%" }} />
+          <div className="mt-5 flex items-center gap-4">
+            <div className="flex flex-col">
+               <span className="text-[9px] font-bold text-[#00f3ff]/60 font-mono tracking-widest">LOYALTY_XP</span>
+               <span className="text-xs font-black text-white">4,320 ⁄ 6,000</span>
             </div>
-            <span className="data-label">4,320 / 6,000</span>
+            <div className="xp-bar flex-1 h-2 relative">
+              <div className="xp-bar-fill shadow-[0_0_15px_rgba(219,0,255,0.5)]" style={{ width: "72%" }} />
+            </div>
           </div>
         </motion.header>
 
         {/* ═══ DASHBOARD GRID ═══ */}
-        <div ref={gridRef} className="bento-grid">
+        <div ref={gridRef} className="grid grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-min">
 
           {/* ── LIVE GAME (full width hero) ── */}
-          <div className="bento-hero">
-            <div className="cyber-card scanlines">
-              <div className="p-4 flex items-center justify-between relative z-10">
+          <div className="col-span-2 lg:col-span-4">
+            <div className="cyber-card scanlines relative overflow-hidden group cursor-pointer border-[#00f3ff]/20">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-900/10 to-transparent pointer-events-none" />
+              <div className="p-4 flex flex-col md:flex-row items-center justify-between relative z-10 gap-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse relative pulse-ring" />
-                  <span className="cyber-badge badge-magenta">LIVE</span>
-                  <span className="text-sm font-semibold text-white ml-1">SoFi Stadium — Rams vs 49ers</span>
+                  <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse relative">
+                     <div className="absolute inset-0 bg-red-500 rounded-full animate-ping opacity-50" />
+                  </div>
+                  <span className="cyber-badge badge-magenta border-red-500 text-red-500 text-[10px]">LIVE FEED</span>
+                  <span className="text-sm font-black text-white tracking-tight uppercase">SoFi Stadium • Rams vs 49ers</span>
+                  <span className="text-[10px] text-white/30 hidden md:block">⁄⁄ BROADCASTID: 9812-X</span>
                 </div>
-                <div className="flex items-center gap-6">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl font-black text-white data-value">24</span>
+                <div className="flex items-center gap-8">
+                  <div className="flex items-center gap-4">
+                    <div className="text-center font-mono">
+                      <p className="text-[8px] text-white/40">RAMS</p>
+                      <span className="text-3xl font-black text-white data-value">24</span>
+                    </div>
                     <span className="text-lg text-[var(--color-text-secondary)]">—</span>
-                    <span className="text-2xl font-black text-white data-value">17</span>
+                    <div className="text-center font-mono">
+                      <p className="text-[8px] text-white/40">49ERS</p>
+                      <span className="text-3xl font-black text-white data-value">17</span>
+                    </div>
                   </div>
-                  <span className="cyber-badge badge-cyan">Q3 · 8:42</span>
+                  <div className="flex flex-col items-end">
+                    <span className="cyber-badge badge-cyan px-3 py-1 font-black text-sm">Q3 · 08:42</span>
+                    <span className="text-[8px] text-[#00f3ff]/60 mt-1 font-mono tracking-widest uppercase">CLOCK_ACTIVE</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* ── CROWD ROUTING USP (animated neon border) ── */}
-          <div className="bento-wide">
-            <div className="cyber-card scanlines h-full">
-              <div className="p-5 relative z-10">
-                <div className="flex items-start justify-between">
+          {/* ── CROWD ROUTING USP (spans 2 col, 2 row) ── */}
+          <div className="col-span-2 lg:col-span-2 row-span-2">
+            <div 
+              role="region"
+              aria-label="Crowd Dynamics Feed"
+              className="cyber-card scanlines h-full relative cursor-pointer group" 
+              onClick={() => router.push("/map")}
+            >
+              <div className="absolute top-0 right-0 p-3 opacity-20 pointer-events-none text-xs font-mono">FLOW_SCAN_v4.1</div>
+              <div className="p-6 relative z-10 flex flex-col h-full">
+                <div className="flex items-start justify-between mb-4">
                   <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-7 h-7 rounded bg-[#00f3ff]/10 border border-[#00f3ff]/30 flex items-center justify-center text-xs">📡</div>
-                      <h2 className="text-base font-bold text-white tracking-tight">Real-Time Crowd Routing</h2>
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 rounded-lg bg-[#00f3ff]/10 border border-[#00f3ff]/40 flex items-center justify-center text-xl shadow-[inset_0_0_10px_rgba(0,243,255,0.2)]">📡</div>
+                      <div>
+                        <h2 className="text-lg font-black text-white tracking-widest uppercase">CROWD DYNAMICS</h2>
+                        <span className="text-[9px] font-mono text-[#00f3ff] animate-pulse">SYSTEM_ONLINE_&_ACTIVE</span>
+                      </div>
                     </div>
-                    <p className="text-xs text-[var(--color-text-secondary)] max-w-xs mb-3">
-                      Telemetry nodes predict & redirect foot traffic. Avg wait reduced from <span className="text-[#ff003c] font-bold">22min</span> → <span className="text-[#00f3ff] font-bold neon-text">4min</span>.
+                    <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed mb-6 font-medium">
+                      Intelligent spatial routing predicts bottleneck formations and redirects traffic to low-density concourses.
                     </p>
-                    <div className="flex gap-2">
-                      <span className="cyber-badge badge-cyan">SYNC:500MS</span>
-                      <span className="cyber-badge badge-magenta">AI ROUTING</span>
+                    <div className="flex flex-col gap-4">
+                       <div className="flex items-center gap-4">
+                          <div className="flex flex-col">
+                             <span className="text-[8px] text-white/40 uppercase">Old Wait</span>
+                             <span className="text-lg font-black text-white/40 line-through decoration-[#ff003c] decoration-2">22 MIN</span>
+                          </div>
+                          <div className="w-10 h-[2px] bg-white/10 relative">
+                             <div className="absolute inset-0 bg-[#00f3ff] animate-pulse" />
+                          </div>
+                          <div className="flex flex-col">
+                             <span className="text-[8px] text-[#00f3ff] font-black uppercase">Optimized</span>
+                             <span className="text-2xl font-black text-[#00f3ff] neon-text">4 MIN</span>
+                          </div>
+                       </div>
+                       <div className="flex gap-2">
+                        <span className="cyber-badge badge-cyan text-[9px] font-mono">REAL-TIME TELEMETRY</span>
+                        <span className="cyber-badge badge-magenta text-[9px] font-mono">AI PREDICTION</span>
+                      </div>
                     </div>
                   </div>
-                  
-                  {/* Animated congestion chart */}
-                  <div className="w-28 h-20 bg-black/50 rounded-lg border border-[var(--color-border)] p-2 flex items-end justify-between gap-1">
-                    <motion.div className="w-full bg-[#ff003c] rounded-t-sm" animate={{ height: ["80%", "30%", "10%"] }} transition={{ duration: 3, ease: "easeInOut", repeat: Infinity, repeatType: "mirror" }} />
-                    <motion.div className="w-full bg-[#fcee0a] rounded-t-sm" animate={{ height: ["60%", "25%", "15%"] }} transition={{ delay: 0.3, duration: 3, ease: "easeInOut", repeat: Infinity, repeatType: "mirror" }} />
-                    <motion.div className="w-full bg-[#00f3ff] rounded-t-sm" animate={{ height: ["15%", "65%", "90%"] }} transition={{ delay: 0.6, duration: 3, ease: "easeInOut", repeat: Infinity, repeatType: "mirror" }} />
-                    <motion.div className="w-full bg-[#22c55e] rounded-t-sm" animate={{ height: ["10%", "55%", "85%"] }} transition={{ delay: 0.9, duration: 3, ease: "easeInOut", repeat: Infinity, repeatType: "mirror" }} />
-                  </div>
+                </div>
+                
+                <div className="mt-auto pt-4 flex-1 flex flex-col justify-end">
+                   <div className="w-full h-32 bg-black/60 rounded-xl border border-white/5 p-4 flex items-center justify-around gap-2 relative overflow-hidden">
+                      <div className="absolute inset-0 bg-[linear-gradient(rgba(0,243,255,0.05)_1px,transparent_1px)] bg-[size:100%_4px]" />
+                      {[80, 30, 10, 45, 60, 20, 15, 90].map((h, i) => (
+                        <motion.div 
+                          key={i}
+                          className="w-full rounded-t-sm relative group" 
+                          style={{ backgroundColor: h > 70 ? '#ff003c' : h > 40 ? '#fcee0a' : '#00f3ff' }}
+                          animate={{ height: [`${h}%`, `${Math.max(10, h-30)}%`, `${h}%`] }} 
+                          transition={{ delay: i * 0.1, duration: 2 + Math.random(), ease: "easeInOut", repeat: Infinity }}
+                        >
+                           <div className="absolute -top-4 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 text-[6px] font-mono text-white transition-opacity">{h}%</div>
+                        </motion.div>
+                      ))}
+                   </div>
+                   <p className="text-[8px] font-mono text-[var(--color-text-secondary)] text-center mt-3 tracking-[0.3em] uppercase">BOTTLENECK_HEATMAP_ANALYSIS</p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* ── FASTEST QUEUE (HUD-style) ── */}
-          <div className="bento-wide">
-            <GlassCard className="!p-4 h-full cursor-pointer" onClick={() => router.push("/order")}>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="data-label mb-1">⚡ FASTEST QUEUE</p>
+          {/* ── FASTEST QUEUE (spans 2 col) ── */}
+          <div className="col-span-2 lg:col-span-2">
+            <GlassCard 
+              glow 
+              role="button"
+              aria-label="Quick Access to Optimal Entry Point"
+              className="!p-6 h-full cursor-pointer relative group border-[#00f3ff]/40 shadow-[0_0_30px_rgba(0,243,255,0.1)] overflow-hidden" 
+              onClick={() => router.push("/order")}
+            >
+              <div className="absolute -right-4 -top-4 w-32 h-32 bg-[#00f3ff]/5 rounded-full blur-3xl pointer-events-none" />
+              <div className="flex items-center justify-between relative z-10">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-3">
+                     <span className="animate-pulse">⚡</span>
+                     <p className="data-label text-[10px] tracking-[0.2em] font-black uppercase">OPTIMAL_ENTRY_POINT</p>
+                  </div>
                   {fastestQueue && (
                     <>
-                      <p className="text-sm font-bold text-white">{fastestQueue.standName}</p>
-                      <p className="text-xs text-[var(--color-text-secondary)] mt-0.5">{fastestQueue.queueLength} in line</p>
+                      <h3 className="text-xl font-black text-white tracking-tight uppercase leading-none mb-1 group-hover:text-[#00f3ff] transition-colors">{fastestQueue.standName}</h3>
+                      <div className="flex items-center gap-3">
+                         <span className="cyber-badge badge-green text-[8px] font-mono">{fastestQueue.queueLength} IN_QUEUE</span>
+                         <span className="text-[10px] text-white/40 font-mono tracking-widest uppercase">SYDNEY_UNIT_B</span>
+                      </div>
                     </>
                   )}
                 </div>
                 {fastestQueue && (
-                  <div className="text-right">
-                    <p className="text-4xl font-black text-[#00f3ff] data-value neon-text">
-                      {fastestQueue.estimatedWaitMin}
+                  <div className="text-right border-l border-white/10 pl-6">
+                    <p className="text-5xl font-black text-[#00f3ff] data-value neon-text leading-none mb-1">
+                      {String(fastestQueue.estimatedWaitMin).padStart(2, '0')}
                     </p>
-                    <p className="data-label">MIN WAIT</p>
+                    <p className="text-[10px] font-mono text-white/60 tracking-widest uppercase">MIN_WAIT</p>
                   </div>
                 )}
               </div>
             </GlassCard>
           </div>
 
-          {/* ── VENUE MAP ── */}
-          <div className="bento-large">
+          {/* ── VENUE MAP (spans 2 col, 2 row) ── */}
+          <div className="col-span-2 lg:col-span-2 row-span-2">
             <GlassCard
               disableTilt
-              className="h-full cursor-pointer !p-4 flex flex-col"
+              className="h-full cursor-pointer !p-6 flex flex-col border-[#00f3ff]/20 bg-[#0c0e1a]/80 group"
               onClick={() => router.push("/map")}
             >
-              <div className="flex items-center justify-between mb-3">
-                <h2 className="text-sm font-bold text-[#00f3ff]">VENUE MAP</h2>
-                <span className="cyber-badge badge-green">INTERACTIVE</span>
-              </div>
-              <div className="flex-1 min-h-[220px] bg-[#060610] rounded-lg relative overflow-hidden border border-[var(--color-border)]">
-                <svg viewBox="0 0 200 200" className="w-full h-full opacity-70" preserveAspectRatio="xMidYMid meet">
-                  <ellipse cx="100" cy="100" rx="85" ry="80" fill="none" stroke="#00f3ff" strokeWidth="6" opacity="0.2">
-                    <animateTransform attributeName="transform" type="rotate" from="0 100 100" to="360 100 100" dur="60s" repeatCount="indefinite" />
-                  </ellipse>
-                  <ellipse cx="100" cy="100" rx="60" ry="56" fill="none" stroke="#db00ff" strokeWidth="3" opacity="0.15" strokeDasharray="8 12">
-                    <animateTransform attributeName="transform" type="rotate" from="360 100 100" to="0 100 100" dur="40s" repeatCount="indefinite" />
-                  </ellipse>
-                  <ellipse cx="100" cy="100" rx="32" ry="28" fill="#0a2010" opacity="0.9" stroke="#22c55e" strokeWidth="1" />
-                  <line x1="72" y1="100" x2="128" y2="100" stroke="white" strokeWidth="0.5" opacity="0.2" />
-                  <circle cx="40" cy="50" r="5" fill="#f59e0b" opacity="0.9"><animate attributeName="opacity" values="0.9;0.4;0.9" dur="2s" repeatCount="indefinite" /></circle>
-                  <circle cx="160" cy="50" r="5" fill="#00f3ff" opacity="0.9"><animate attributeName="opacity" values="0.9;0.4;0.9" dur="2.5s" repeatCount="indefinite" /></circle>
-                  <circle cx="160" cy="150" r="5" fill="#db00ff" opacity="0.9"><animate attributeName="opacity" values="0.9;0.4;0.9" dur="1.8s" repeatCount="indefinite" /></circle>
-                  <circle cx="40" cy="150" r="5" fill="#6b7280" opacity="0.9" />
-                  <circle cx="100" cy="100" r="4" fill="#3b82f6"><animate attributeName="r" values="3;6;3" dur="2s" repeatCount="indefinite" /></circle>
-                </svg>
-              </div>
-              <div className="flex items-center justify-between mt-2">
-                <div className="flex gap-3 text-[9px] text-[var(--color-text-secondary)] font-mono">
-                  <span>■ FOOD</span><span>■ DRINK</span><span>■ WC</span><span className="text-blue-400">● YOU</span>
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                   <h2 className="text-lg font-black text-white tracking-widest uppercase">SPATIAL HUD</h2>
+                   <p className="text-[10px] font-mono text-[#00f3ff]">MAP_REVISION: 8.4.1</p>
                 </div>
-                <span className="text-[10px] text-[#00f3ff]">TAP TO EXPLORE →</span>
+                <span className="cyber-badge badge-green shadow-[0_0_15px_rgba(34,197,94,0.3)] text-[10px]">INTELLIGENT</span>
+              </div>
+              
+              <div className="flex-1 min-h-[300px] bg-[#060610] rounded-xl relative overflow-hidden border border-white/5 group-hover:border-white/10 transition-colors">
+                <div className="absolute inset-0 z-10 pointer-events-none">
+                   <motion.div 
+                    animate={{ top: ["0%", "100%"] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                    className="w-full h-1 bg-[#00f3ff]/30 shadow-[0_0_20px_#00f3ff] relative"
+                   />
+                </div>
+
+                <svg viewBox="0 0 200 200" className="w-full h-full p-4" preserveAspectRatio="xMidYMid meet">
+                  <ellipse cx="100" cy="100" rx="90" ry="85" fill="none" stroke="#00f3ff" strokeWidth="1" strokeDasharray="2 4" opacity="0.3" />
+                  <ellipse cx="100" cy="100" rx="65" ry="60" fill="none" stroke="#db00ff" strokeWidth="5" opacity="0.1" />
+                  <ellipse cx="100" cy="100" rx="45" ry="40" fill="#0a2010" stroke="#22c55e" strokeWidth="1" opacity="0.8" />
+                  <line x1="60" y1="100" x2="140" y2="100" stroke="white" strokeWidth="0.5" opacity="0.1" />
+                  
+                  {[
+                    { x: 40, y: 55, c: "#f59e0b" },
+                    { x: 160, y: 55, c: "#00f3ff" },
+                    { x: 160, y: 145, c: "#db00ff" },
+                    { x: 40, y: 145, c: "#6b7280" }
+                  ].map((p, i) => (
+                    <g key={i}>
+                       <circle cx={p.x} cy={p.y} r="2" fill={p.c} />
+                    </g>
+                  ))}
+                  <circle cx="100" cy="105" r="4" fill="#3b82f6" />
+                </svg>
+
+                <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end pointer-events-none">
+                   <div className="flex flex-col gap-0.5">
+                      <span className="text-[7px] font-mono text-white/40 tracking-widest uppercase">CONC_NODES: 12</span>
+                      <span className="text-[7px] font-mono text-[#00f3ff] tracking-widest uppercase">ENCRYPT_MODE_AES:256</span>
+                   </div>
+                   <div className="text-right">
+                      <p className="text-[10px] font-black text-white uppercase tracking-tighter">SOFI STADIUM</p>
+                   </div>
+                </div>
+              </div>
+              
+              <div className="flex items-center justify-between mt-4">
+                <div className="flex gap-4">
+                   <div className="flex items-center gap-2">
+                       <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_5px_#3b82f6]" />
+                       <span className="text-[9px] font-mono text-white font-black tracking-widest">YOU</span>
+                   </div>
+                </div>
+                <div className="group flex items-center gap-2 px-3 py-1 bg-white/5 rounded border border-white/5 hover:border-[#00f3ff]/40 transition-all">
+                  <span className="text-[8px] font-black text-white tracking-[0.25em] uppercase">INITIATE_MAP</span>
+                  <span className="text-[10px] text-[#00f3ff] group-hover:translate-x-1 transition-transform">→</span>
+                </div>
               </div>
             </GlassCard>
           </div>
 
-          {/* ── QUEUE TIMES (primary data card) ── */}
-          <div className="bento-wide" style={{ gridRow: "span 2" }}>
-            <GlassCard className="!p-4 h-full" aria-live="polite" aria-atomic="true">
-              <div className="flex items-center justify-between mb-4">
-                <p className="data-label">CONCESSION WAIT TIMES</p>
-                <div className="group relative cursor-help">
-                  <div className="w-5 h-5 rounded border border-[#00f3ff]/30 flex items-center justify-center text-[9px] text-[#00f3ff] font-mono">i</div>
-                  <div className="hidden group-hover:block absolute right-0 top-7 z-50 w-52 p-3 bg-[#0c0e1a] border border-[#00f3ff]/30 rounded-lg shadow-[0_0_30px_rgba(0,243,255,0.2)] text-[10px]">
-                    <p className="font-bold text-[#00f3ff] mb-1 font-mono">REAL-TIME TELEMETRY</p>
-                    <p className="text-[var(--color-text-secondary)]">Firebase RTDB syncs every <span className="text-white font-bold">500ms</span> from IoT sensors.</p>
-                  </div>
+          {/* ── QUEUE LATENCY (spans 2 col, 2 row) ── */}
+          <div className="col-span-2 lg:col-span-2 row-span-2">
+            <GlassCard className="!p-6 h-full border-[#db00ff]/20 bg-[#160c1a]/40" aria-live="polite" aria-atomic="true">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <p className="data-label text-[10px] font-mono tracking-widest">IOT_TELEMETRY_FEED</p>
+                  <h2 className="text-lg font-black text-white tracking-widest uppercase mt-1">QUEUE LATENCY</h2>
                 </div>
+                <motion.div 
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                  className="w-10 h-10 rounded-full border border-[#db00ff]/30 flex items-center justify-center text-sm text-[#db00ff] relative"
+                >
+                   <span className="absolute">⟳</span>
+                </motion.div>
               </div>
-              <div className="space-y-3">
-                {sortedQueues.slice(0, 6).map((q) => (
-                  <div key={q.standId}>
-                    <div className="flex justify-between text-xs mb-1">
-                      <span className="text-white font-medium">{q.standName}</span>
-                      <span className="data-value text-sm" style={{ color: getWaitColor(q.estimatedWaitMin) }}>
-                        {q.estimatedWaitMin}<span className="text-[9px] font-normal ml-0.5 text-[var(--color-text-secondary)]">min</span>
-                      </span>
+
+              <div className="space-y-5">
+                {sortedQueues.slice(0, 6).map((q, i) => (
+                  <div key={q.standId} className="group cursor-pointer" onClick={() => router.push(`/order?standId=${q.standId}`)}>
+                    <div className="flex justify-between items-end mb-2">
+                      <div className="flex flex-col">
+                         <span className="text-[8px] font-mono text-white/30 uppercase tracking-widest">STAND_ID: {q.standId.slice(0, 8)}</span>
+                         <span className="text-[13px] font-black text-white tracking-tight leading-none group-hover:text-[#db00ff] transition-colors">{q.standName.toUpperCase()}</span>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-2xl font-black data-value leading-none" style={{ color: getWaitColor(q.estimatedWaitMin) }}>
+                          {String(q.estimatedWaitMin).padStart(2, '0')}
+                        </span>
+                        <span className="text-[9px] font-mono ml-1 text-white/40 uppercase">MIN</span>
+                      </div>
                     </div>
-                    <div className="w-full bg-white/5 h-1 rounded-full overflow-hidden">
+                    <div className="w-full bg-white/5 h-2 rounded-sm overflow-hidden p-[2px] border border-white/5">
                       <motion.div
-                        className="h-full rounded-full"
-                        style={{ backgroundColor: getWaitColor(q.estimatedWaitMin) }}
+                        className="h-full rounded-sm shadow-[0_0_10px_currentColor]"
+                        style={{ backgroundColor: getWaitColor(q.estimatedWaitMin), color: getWaitColor(q.estimatedWaitMin) }}
+                        initial={{ width: 0 }}
                         animate={{ width: `${Math.min((q.estimatedWaitMin / 15) * 100, 100)}%` }}
-                        transition={{ duration: 0.8, ease: "easeOut" }}
+                        transition={{ delay: i * 0.1, duration: 1, ease: "easeOut" }}
                       />
                     </div>
                   </div>
                 ))}
               </div>
+
+              <div className="mt-8 pt-6 border-t border-white/5">
+                 <button 
+                  onClick={() => router.push("/order")}
+                  className="w-full py-3 bg-[#db00ff]/10 hover:bg-[#db00ff]/20 border border-[#db00ff]/30 rounded-lg text-[10px] font-black text-[#db00ff] uppercase tracking-[0.3em] transition-all"
+                 >
+                    EXPLORE_ALL_CONCESSIONS
+                 </button>
+              </div>
             </GlassCard>
           </div>
 
-          {/* ── SLASH ALERTS ── */}
-          <div className="bento-wide">
-            <div className="cyber-card h-full">
-              <div className="p-4 relative z-10 flex items-center gap-4">
+          {/* ── SLASH ALERTS HUD ── */}
+          <div className="col-span-2">
+            <div className="cyber-card h-full border-[#fcee0a]/30">
+              <div className="p-6 relative z-10 flex items-center gap-6">
                 <motion.div
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{ repeat: Infinity, duration: 1.5 }}
-                  className="w-14 h-14 rounded-lg border border-[#fcee0a]/30 bg-[#fcee0a]/5 flex items-center justify-center shrink-0"
+                  animate={{ 
+                    scale: [1, 1.15, 1],
+                    boxShadow: ["0 0 0px #fcee0a", "0 0 20px #fcee0a", "0 0 0px #fcee0a"]
+                  }}
+                  transition={{ repeat: Infinity, duration: 2 }}
+                  className="w-16 h-16 rounded-xl border border-[#fcee0a]/50 bg-[#fcee0a]/10 flex items-center justify-center shrink-0"
                 >
-                  <span className="text-2xl">⚡</span>
+                  <span className="text-3xl filter drop-shadow-[0_0_10px_rgba(252,238,10,0.8)]">⚡</span>
                 </motion.div>
-                <div>
-                  <h3 className="font-bold text-white text-sm">Slash Alerts</h3>
-                  <p className="text-xs text-[var(--color-text-secondary)] mt-0.5">
-                    Predictive alerts fire when lines drop below 2 min. Trip time: <span className="text-[#ff003c] font-bold line-through">22 min</span> → <span className="text-[#00f3ff] font-bold neon-text">4 min</span>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-1">
+                     <h3 className="font-black text-white text-base tracking-widest uppercase">SLASH ALERTS_v2</h3>
+                     <span className="text-[8px] font-mono text-white/40 uppercase">PREDICTIVE_FIREBASE_ALGO</span>
+                  </div>
+                  <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed font-medium">
+                     Neural monitoring of queue velocity. Average excursion time optimized: <span className="text-[#ff003c] font-black line-through italic mr-2">22 MIN</span> <span className="text-[#00f3ff] font-black neon-text">⁄⁄ 04 MIN</span>
                   </p>
-                  <div className="flex items-center gap-2 mt-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                    <span className="cyber-badge badge-green">MONITORING</span>
+                  <div className="flex items-center gap-4 mt-3">
+                    <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                      <span className="text-[9px] font-black text-green-400 tracking-widest uppercase">MONITOR_ACTIVE</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* ── GEMINI CONCIERGE ── */}
-          <div className="bento-wide">
-            <GlassCard glow className="!p-4 h-full flex flex-col">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#00f3ff] to-[#db00ff] flex items-center justify-center shadow-[0_0_15px_rgba(0,243,255,0.3)]">
-                  <span className="text-lg">✦</span>
+          {/* ── GEMINI AGENTIC HUD ── */}
+          <div className="col-span-2 lg:col-span-2">
+            <GlassCard glow className="!p-6 h-full flex flex-col border-[#00f3ff]/30 bg-[#0c1a1a]/40 group" onClick={() => setChatOpen(true)}>
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#00f3ff] to-[#db00ff] flex items-center justify-center shadow-[0_0_20px_rgba(0,243,255,0.4)] group-hover:scale-110 transition-transform">
+                    <span className="text-2xl text-white font-serif drop-shadow-md">✦</span>
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-black text-white tracking-widest uppercase leading-none">GEMINI CONCIERGE</h2>
+                    <p className="text-[10px] text-[var(--color-text-secondary)] font-mono tracking-widest mt-1 uppercase">LLM_AGENT ⁄⁄ FUNC_CALLING_v1.5</p>
+                  </div>
                 </div>
-                <div>
-                  <h2 className="text-sm font-bold text-white">Gemini Concierge</h2>
-                  <p className="text-[10px] text-[var(--color-text-secondary)] font-mono">GOOGLE AI • FUNCTION CALLING</p>
+                <div className="text-right">
+                   <div className="flex items-center gap-1 justify-end">
+                      <div className="w-1 h-1 rounded-full bg-[#00f3ff]" />
+                      <div className="w-1 h-1 rounded-full bg-[#00f3ff]" />
+                      <div className="w-1 h-1 rounded-full bg-[#00f3ff]" />
+                   </div>
+                   <span className="text-[8px] font-mono text-white/40 uppercase tracking-widest">READY_TO_CHAT</span>
                 </div>
               </div>
-              <div className="space-y-1.5 mb-3 flex-1">
-                {["Shortest beer line?", "Navigate to Sec 114", "Order nachos"].map((q) => (
-                  <button
+              
+              <div className="grid grid-cols-1 gap-2 mb-6">
+                {[
+                  "Which restroom has no line right now?",
+                  "Order two hot dogs and a soda to Sec 102",
+                  "Estimate wait for Rams merchandise stand"
+                ].map((q) => (
+                  <div
                     key={q}
-                    onClick={() => setChatOpen(true)}
-                    className="w-full text-left text-xs px-3 py-2 rounded-lg bg-white/3 text-[var(--color-text-secondary)] border border-[var(--color-border)] hover:border-[#00f3ff]/50 hover:text-[#00f3ff] transition-all font-mono"
+                    className="group-hover:translate-x-2 transition-transform cursor-pointer flex items-center gap-3 py-2 px-3 rounded border border-white/5 bg-white/2"
                   >
-                    &gt; {q}
-                  </button>
+                    <span className="text-[#00f3ff] font-mono text-[10px]">&gt;</span>
+                    <span className="text-xs text-[var(--color-text-secondary)] font-mono group-hover:text-white transition-colors">{q}</span>
+                  </div>
                 ))}
               </div>
+              
               <button
-                aria-label="Open Gemini Concierge Chat"
-                onClick={() => setChatOpen(true)}
-                className="w-full py-2.5 bg-gradient-to-r from-[#00f3ff]/20 to-[#db00ff]/20 text-[#00f3ff] font-bold rounded-lg border border-[#00f3ff]/30 hover:border-[#00f3ff] hover:shadow-[0_0_20px_rgba(0,243,255,0.3)] transition-all active:scale-[0.98] text-sm font-mono tracking-wider"
+                aria-label="Engage StadiumFlow Neural Assistant"
+                className="w-full py-4 relative overflow-hidden rounded-xl border border-[#00f3ff]/50 bg-black/40 group/btn"
               >
-                OPEN CONCIERGE ✦
+                 <div className="absolute inset-0 bg-[#00f3ff]/5 scale-x-0 group-hover/btn:scale-x-100 transition-transform origin-left duration-500" />
+                 <span className="relative z-10 text-[10px] font-black text-[#00f3ff] uppercase tracking-[0.4em]">INITIATE_NEURAL_LINK ✦</span>
               </button>
             </GlassCard>
           </div>
 
-          {/* ── RESTROOMS + ORDERS row ── */}
-          <div className="bento-wide">
-            <GlassCard className="!p-4 h-full">
-              <p className="data-label mb-3">RESTROOM STATUS</p>
-              <div className="space-y-2">
+          {/* ── RESTROOMS HUD ── */}
+          <div className="col-span-2 lg:col-span-1">
+            <GlassCard className="!p-5 h-full bg-black/60 border-white/5 relative overflow-hidden group hover:border-[#00f3ff]/20 transition-all cursor-pointer" onClick={() => router.push("/map?filter=restroom")}>
+              <div className="absolute top-0 right-0 p-3 text-[10px] text-white/10 font-mono tracking-widest pointer-events-none uppercase">WC_MONITOR</div>
+              <p className="data-label text-[10px] mb-4 text-[#00f3ff]/60 uppercase tracking-[0.2em] font-black">FACILITY_STATUS</p>
+              <div className="space-y-4">
                 {restrooms.map((q) => (
-                  <div key={q.standId} className="flex items-center justify-between">
-                    <span className="text-xs text-white font-mono">{q.standName.replace("Restroom ", "WC-")}</span>
-                    <span className="data-value text-xs" style={{ color: getWaitColor(q.estimatedWaitMin) }}>
-                      {q.estimatedWaitMin} min
-                    </span>
+                  <div key={q.standId} className="flex flex-col gap-1">
+                    <div className="flex items-center justify-between">
+                       <span className="text-[10px] text-white font-black uppercase font-mono">{q.standName.replace("Restroom ", "UNIT-")}</span>
+                       <span className="text-sm font-black italic" style={{ color: getWaitColor(q.estimatedWaitMin) }}>
+                          {q.estimatedWaitMin}M
+                       </span>
+                    </div>
+                    <div className="w-full h-[1px] bg-white/5 relative">
+                       <div className="h-full bg-white/20" style={{ width: `${(q.queueLength / 10) * 100}%` }} />
+                    </div>
                   </div>
                 ))}
               </div>
             </GlassCard>
           </div>
 
-          <div className="bento-wide">
+          <div className="col-span-2 lg:col-span-1">
             <GlassCard
               glow={activeOrders.some((o) => o.status === "ready")}
-              className="!p-4 cursor-pointer h-full"
+              className="!p-5 cursor-pointer h-full border-white/5 bg-black/60 relative overflow-hidden group hover:border-[#db00ff]/20 transition-all font-mono"
               onClick={() => router.push("/orders")}
             >
-              <p className="data-label mb-3">ACTIVE ORDERS</p>
+              <div className="absolute top-0 right-0 p-3 text-[10px] text-white/10 font-mono tracking-widest pointer-events-none">TX_BUFFER</div>
+              <p className="data-label text-[10px] mb-4 text-[#db00ff]/60 uppercase tracking-[0.2em] font-black">ACTIVE_ORDERS</p>
               {activeOrders.length > 0 ? (
-                <div className="space-y-2">
+                <div className="space-y-4">
                   {activeOrders.slice(0, 3).map((order) => (
-                    <div key={order.id} className="flex items-center justify-between">
-                      <span className="text-xs text-white truncate max-w-[120px] font-mono">{order.standName}</span>
-                      <span className={`cyber-badge ${
-                        order.status === "ready" ? "badge-green" : order.status === "preparing" ? "badge-cyan" : "badge-yellow"
-                      }`}>
-                        {order.status === "ready" ? "READY" : order.status === "preparing" ? "MAKING" : "QUEUED"}
-                      </span>
+                    <div key={order.id} className="flex flex-col gap-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] text-white truncate max-w-[80px] font-black">{order.standName.toUpperCase()}</span>
+                        <span className={`text-[8px] font-black px-1.5 py-0.5 rounded border ${
+                          order.status === "ready" ? "bg-green-400/20 border-green-400 text-green-400" : order.status === "preparing" ? "bg-[#00f3ff]/20 border-[#00f3ff] text-[#00f3ff]" : "bg-yellow-400/20 border-yellow-400 text-yellow-400"
+                        }`}>
+                          {order.status === "ready" ? "READY" : order.status === "preparing" ? "PROCESS" : "QUEUE"}
+                        </span>
+                      </div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-4">
-                  <p className="text-sm text-[var(--color-text-secondary)] font-mono">NO ACTIVE ORDERS</p>
-                  <p className="text-xs text-[#00f3ff] mt-1">Tap to order →</p>
+                <div className="text-center py-6">
+                  <p className="text-[10px] text-white/30 tracking-widest uppercase">NO_ACTIVE_TX</p>
+                  <p className="text-[8px] text-[#db00ff] mt-2 group-hover:scale-110 transition-transform">INITIALIZE_COMMERCE ▷</p>
                 </div>
               )}
             </GlassCard>
           </div>
 
           {/* ── QUICK ACTIONS ── */}
-          <div className="bento-wide">
-            <GlassCard className="!p-4 h-full">
-              <p className="data-label mb-3">QUICK ACTIONS</p>
-              <div className="grid grid-cols-3 gap-2">
+          <div className="col-span-2">
+            <GlassCard className="!p-6 h-full border-white/5 bg-black/40">
+              <p className="data-label text-[10px] mb-4 text-white/40 uppercase tracking-[0.3em] font-black">SYSTEM_COMMANDS</p>
+              <div className="grid grid-cols-3 gap-4">
                 {[
                   { icon: "🍔", label: "ORDER", path: "/order" },
                   { icon: "🗺", label: "MAP", path: "/map" },
@@ -400,67 +549,80 @@ export default function Home() {
                     key={action.label}
                     aria-label={action.label}
                     onClick={() => router.push(action.path)}
-                    className="flex flex-col items-center gap-2 py-3 rounded-lg bg-white/3 border border-[var(--color-border)] hover:border-[#00f3ff]/50 hover:shadow-[0_0_15px_rgba(0,243,255,0.1)] transition-all active:scale-95"
+                    className="flex flex-col items-center gap-3 py-4 rounded-xl bg-white/5 border border-white/5 hover:border-[#00f3ff]/50 hover:bg-[#00f3ff]/5 transition-all active:scale-95 group/act"
                   >
-                    <span className="text-xl">{action.icon}</span>
-                    <span className="text-[9px] font-mono tracking-[0.15em] text-[var(--color-text-secondary)]">{action.label}</span>
+                    <span className="text-2xl group-hover/act:scale-110 transition-transform">{action.icon}</span>
+                    <span className="text-[10px] font-black tracking-widest text-[var(--color-text-secondary)] uppercase group-hover/act:text-[#00f3ff] transition-colors">{action.label}</span>
                   </button>
                 ))}
               </div>
             </GlassCard>
           </div>
 
-          {/* ── FIND MY CREW ── */}
-          <div className="bento-wide">
-            <div className="cyber-card h-full cursor-pointer" onClick={() => router.push("/crew")}>
-              <div className="p-4 flex items-center justify-between relative z-10">
-                <div>
-                  <h2 className="text-sm font-bold text-white">Find My Crew</h2>
-                  <p className="text-xs text-[var(--color-text-secondary)] mt-0.5 font-mono">
-                    {crewId
-                      ? `${members.length} MEMBERS • LOCATION SHARING`
-                      : "CREATE/JOIN A CREW →"}
-                  </p>
+          {/* ── FIND MY CREW (spans 2 col) ── */}
+          <div className="col-span-2">
+            <div className="cyber-card h-full cursor-pointer hover:border-[#db00ff]/50 transition-all group" onClick={() => router.push("/crew")}>
+              <div className="p-6 flex items-center justify-between relative z-10">
+                <div className="flex items-center gap-6">
+                   <div className="w-14 h-14 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-3xl group-hover:bg-[#db00ff]/10 group-hover:border-[#db00ff]/40 transition-all shadow-[inset_0_0_10px_rgba(219,0,255,0.1)]">
+                      👥
+                   </div>
+                   <div>
+                    <h2 className="text-base font-black text-white tracking-widest uppercase">CREW_COORD_NET</h2>
+                    <p className="text-[10px] font-mono text-[var(--color-text-secondary)] mt-1 tracking-widest uppercase">
+                      {crewId
+                        ? `${String(members.length).padStart(2, '0')} ACTIVE_UNITS ⁄⁄ LOCATION_SYNC_ON`
+                        : "ESTABLISH_NEW_CREW_NETWORKS ▷"}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex -space-x-2">
+                <div className="flex -space-x-3">
                   {members.slice(0, 4).map((member, i) => (
                     <motion.div
                       key={member.uid}
-                      initial={{ opacity: 0, x: 10 }}
-                      animate={{ opacity: 1, x: 0 }}
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: i * 0.1 }}
-                      className="w-9 h-9 rounded-lg border border-[#111424] flex items-center justify-center font-bold text-white text-[10px] font-mono"
+                      className="w-10 h-10 rounded-xl border border-[#0c0e1a] flex items-center justify-center font-black text-white text-[10px] font-mono shadow-[5px_0_15px_rgba(0,0,0,0.5)] z-10"
                       style={{ backgroundColor: ["#db00ff", "#00f3ff", "#f97316", "#22c55e"][i % 4] }}
                     >
                       {member.avatar}
                     </motion.div>
                   ))}
-                  {members.length === 0 && (
-                    <div className="w-9 h-9 rounded-lg border border-dashed border-[var(--color-border)] flex items-center justify-center text-[var(--color-text-secondary)] text-sm">+</div>
-                  )}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* ── ACHIEVEMENTS ── */}
-          <div className="bento-hero">
-            <GlassCard className="!p-4">
-              <div className="flex items-center justify-between mb-3">
-                <p className="data-label">ACHIEVEMENTS</p>
-                <span className="text-xs text-[var(--color-text-secondary)] font-mono">3/12 UNLOCKED</span>
+          {/* ── ACHIEVEMENTS HUD (Full Width) ── */}
+          <div className="col-span-2 lg:col-span-4">
+            <GlassCard className="!p-6 bg-black/40 border-white/5 h-full relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-4 opacity-10 text-4xl font-black pointer-events-none tracking-tighter uppercase">TROPHY_SYS_v2</div>
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <p className="data-label text-[10px] tracking-widest mb-1 text-[#fcee0a]/60 font-black uppercase">GAMIFICATION_ENGINE</p>
+                  <h2 className="text-lg font-black text-white tracking-widest uppercase">BATTLE_ACHIEVEMENTS</h2>
+                </div>
+                <div className="text-right">
+                   <p className="text-xl font-black text-[#fcee0a] leading-none mb-1">03 <span className="text-[10px] text-white/40 font-mono tracking-[0.3em]">⁄⁄ 12</span></p>
+                   <div className="w-32 h-1 bg-white/5 rounded-full overflow-hidden">
+                      <div className="h-full bg-[#fcee0a] shadow-[0_0_10px_#fcee0a]" style={{ width: '25%' }} />
+                   </div>
+                </div>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
-                  { icon: "🎯", name: "First Order", desc: "Placed your first order", unlocked: true },
-                  { icon: "🏃", name: "Queue Skipper", desc: "Used a Slash Alert", unlocked: true },
-                  { icon: "👥", name: "Crew Chief", desc: "Created a crew", unlocked: true },
-                  { icon: "🔒", name: "Speed Demon", desc: "Sub-2min pickup", unlocked: false },
+                  { icon: "🎯", name: "First Order", desc: "COMMERCE_FLOW_INITIATED", unlocked: true },
+                  { icon: "🏃", name: "Queue Skipper", desc: "SLASH_ALERTS_ENGAGED", unlocked: true },
+                  { icon: "👥", name: "Crew Chief", desc: "NET_COORD_ESTABLISHED", unlocked: true },
+                  { icon: "🔒", name: "Speed Demon", desc: "LOCKED_REQUIRE_S2_VAL", unlocked: false },
                 ].map((ach) => (
-                  <div key={ach.name} className={`p-3 rounded-lg border text-center ${ach.unlocked ? 'border-[#fcee0a]/30 bg-[#fcee0a]/5' : 'border-[var(--color-border)] bg-white/2 opacity-40'}`}>
-                    <span className="text-2xl block mb-1">{ach.icon}</span>
-                    <p className="text-[10px] font-bold text-white">{ach.name}</p>
-                    <p className="text-[8px] text-[var(--color-text-secondary)] mt-0.5">{ach.desc}</p>
+                  <div key={ach.name} className={`p-4 rounded-xl border relative overflow-hidden transition-all group hover:scale-[1.02] cursor-pointer ${ach.unlocked ? 'border-[#fcee0a]/30 bg-[#fcee0a]/10 shadow-[0_0_20px_rgba(252,238,10,0.05)]' : 'border-white/5 bg-white/5 opacity-40 grayscale'}`}>
+                    <div className="absolute -right-2 -bottom-2 opacity-10 scale-150 rotate-12 transition-transform group-hover:scale-[2] group-hover:rotate-0">{ach.icon}</div>
+                    <span className="text-3xl block mb-3 drop-shadow-lg">{ach.icon}</span>
+                    <p className="text-xs font-black text-white uppercase tracking-widest leading-none mb-1">{ach.name}</p>
+                    <p className="text-[8px] font-mono text-[var(--color-text-secondary)] uppercase tracking-tighter">{ach.desc}</p>
+                    {ach.unlocked && <div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-[#fcee0a] shadow-[0_0_5px_#fcee0a]" />}
                   </div>
                 ))}
               </div>
