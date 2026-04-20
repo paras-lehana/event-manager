@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { db } from "@/lib/firebase/config";
+import { rtdb } from "@/lib/firebase";
 import { ref, onValue, set, push, serverTimestamp } from "firebase/database";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { AmbientScene } from "@/components/ui/AmbientScene";
@@ -42,7 +42,7 @@ export default function AdminHUD() {
   ]);
 
   useEffect(() => {
-    const crewRef = ref(db, "crew");
+    const crewRef = ref(rtdb, "crew");
     const unsubscribe = onValue(crewRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
@@ -93,7 +93,7 @@ export default function AdminHUD() {
          lastSeen: Date.now()
        };
        
-       await push(ref(db, "crew"), newMember);
+       await push(ref(rtdb, "crew"), newMember);
        addLog(`REGISTERED_ENTITY: ${newMember.name}`, "success");
        await new Promise(r => setTimeout(r, 200));
     }

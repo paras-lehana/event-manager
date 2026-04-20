@@ -13,48 +13,28 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:000:web:000",
 };
 
-let app: FirebaseApp;
-let auth: Auth;
-let db: Firestore;
-let rtdb: Database;
-
 function getFirebaseApp(): FirebaseApp {
   if (!getApps().length) {
-    app = initializeApp(firebaseConfig);
-  } else {
-    app = getApps()[0];
+    return initializeApp(firebaseConfig);
   }
-  return app;
+  return getApps()[0];
 }
 
-export function getFirebaseAuth(): Auth {
-  if (!auth) {
-    auth = getAuth(getFirebaseApp());
-  }
-  return auth;
-}
-
-export function getFirebaseFirestore(): Firestore {
-  if (!db) {
-    db = getFirestore(getFirebaseApp());
-  }
-  return db;
-}
-
-export function getFirebaseRTDB(): Database {
-  if (!rtdb) {
-    rtdb = getDatabase(getFirebaseApp());
-  }
-  return rtdb;
-}
+const app = getFirebaseApp();
+export const auth = getAuth(app);
+export const db = getFirestore(app);
+export const rtdb = getDatabase(app);
 
 export async function signInAnon(): Promise<User> {
-  const authInstance = getFirebaseAuth();
-  const cred = await signInAnonymously(authInstance);
+  const cred = await signInAnonymously(auth);
   return cred.user;
 }
 
 export function onAuthChange(callback: (user: User | null) => void) {
-  const authInstance = getFirebaseAuth();
-  return onAuthStateChanged(authInstance, callback);
+  return onAuthStateChanged(auth, callback);
 }
+
+// Keep getters for backward compatibility if needed, though they aren't used yet
+export function getFirebaseAuth() { return auth; }
+export function getFirebaseFirestore() { return db; }
+export function getFirebaseRTDB() { return rtdb; }
