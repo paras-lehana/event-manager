@@ -63,6 +63,13 @@ export const MOCK_STANDS: Stand[] = [
 MOCK_VENUE.stands = MOCK_STANDS;
 
 // ============ INITIAL QUEUE DATA ============
+/**
+ * Generates an initial state of queue telemetries across all configured stands.
+ * Utilizes pseudo-random baselines combined with stand-specific velocity profiles
+ * to seed the simulation engine.
+ * 
+ * @returns {QueueTelemetry[]} Array of active queue data telemetry readings.
+ */
 export function generateMockQueues(): QueueTelemetry[] {
   return MOCK_STANDS.map((stand) => {
     const baseQueue = stand.type === "restroom" ? Math.floor(Math.random() * 20) + 5 : Math.floor(Math.random() * 15) + 2;
@@ -80,6 +87,11 @@ export function generateMockQueues(): QueueTelemetry[] {
 }
 
 // ============ MOCK ORDERS ============
+/**
+ * Generates a mock dataset of active transaction orders for the primary user.
+ * 
+ * @returns {Order[]} Array of historical and current processing digital orders.
+ */
 export function createMockOrders(): Order[] {
   return [
     {
@@ -112,6 +124,14 @@ export function createMockOrders(): Order[] {
 }
 
 // ============ SIMULATE QUEUE UPDATES ============
+/**
+ * Progresses the time-series simulation by mutating passing metrics logic.
+ * Modulates length sizes stochastically and recalculates wait estimations 
+ * continuously to fuel real-time dashboard UI bindings.
+ * 
+ * @param {QueueTelemetry[]} queues - The current architectural state of queues.
+ * @returns {QueueTelemetry[]} A newly mutated array representing the T+1 state.
+ */
 export function simulateQueueUpdate(queues: QueueTelemetry[]): QueueTelemetry[] {
   return queues.map((q) => {
     const delta = Math.random() > 0.5 ? 1 : -1;

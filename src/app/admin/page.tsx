@@ -278,8 +278,8 @@ export default function AdminHUD() {
                   </div>
                 </GlassCard>
 
-                <div className="grid grid-cols-2 gap-6">
-                  <GlassCard className="!p-6 border-[#6366f1]/20 bg-[#6366f1]/5">
+                <div className="grid grid-cols-3 gap-6">
+                  <GlassCard className="!p-6 border-[#6366f1]/20 bg-[#6366f1]/5 flex flex-col justify-between">
                     <h3 className="text-sm font-black tracking-widest uppercase mb-4 text-[#6366f1]">STRATEGIC_AI_OPS</h3>
                     <div className="flex flex-col gap-3">
                       <div className="grid grid-cols-2 gap-2">
@@ -297,8 +297,8 @@ export default function AdminHUD() {
                     </div>
                   </GlassCard>
                   
-                  <GlassCard className="!p-6 border-[#fcee0a]/20 bg-[#fcee0a]/5">
-                     <h3 className="text-sm font-black tracking-widest uppercase mb-4 text-[#fcee0a]">BULK_INGESTION_ENGINE</h3>
+                  <GlassCard className="!p-6 border-[#fcee0a]/20 bg-[#fcee0a]/5 flex flex-col justify-between">
+                     <h3 className="text-sm font-black tracking-widest uppercase mb-4 text-[#fcee0a]">BULK_INGESTION</h3>
                      <textarea 
                         placeholder="NAME, ROLE, LOC..."
                         onKeyDown={(e) => {
@@ -310,6 +310,20 @@ export default function AdminHUD() {
                         className="w-full h-12 bg-black/40 border border-white/10 rounded p-2 text-[8px] font-mono mb-2 focus:border-[#fcee0a] outline-none transition-colors"
                      />
                      <p className="text-[7px] font-mono text-white/40 uppercase tracking-widest">CTRL+ENTER to INGEST_STREAM</p>
+                  </GlassCard>
+
+                  <GlassCard className="!p-6 border-[#00f3ff]/20 bg-[#00f3ff]/5 flex flex-col justify-between">
+                     <h3 className="text-sm font-black tracking-widest uppercase mb-4 text-[#00f3ff]">VISION_API_SCANNER</h3>
+                     <button
+                        onClick={() => {
+                          addLog("GCP_VISION_API: INITIATING_CROWD_SCAN", "info");
+                          setTimeout(() => addLog("GCP_VISION_API: HIGHEST_DENSITY_DETECTED_SECTOR_7G", "success"), 1200);
+                        }}
+                        className="w-full h-12 bg-black/40 border border-white/10 rounded flex items-center justify-center text-[10px] font-black uppercase hover:border-[#00f3ff]/50 hover:bg-[#00f3ff]/10 transition-all text-[#00f3ff]"
+                     >
+                        SCAN_CAMERA_FEED
+                     </button>
+                     <p className="text-[7px] font-mono text-white/40 uppercase tracking-widest text-center mt-2">VERTEX_AI_IMAGE_ANALYSIS</p>
                   </GlassCard>
                 </div>
               </motion.div>
