@@ -7,8 +7,10 @@ import { AIChatPanel } from "@/components/ui/AIChatPanel";
 import { AchievementsHUD } from "@/components/ui/AchievementsHUD";
 import { useQueues, useCrew, useOrders, useToast } from "@/lib/providers";
 import { useChat } from "@/app/providers";
+import { useVenue } from "@/lib/providers";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { VenueSwitcherMap } from "@/components/ui/VenueSwitcherMap";
 
 export default function Home() {
   const gridRef = useRef<HTMLDivElement>(null);
@@ -18,6 +20,8 @@ export default function Home() {
   const { orders } = useOrders();
   const { addToast } = useToast();
   const router = useRouter();
+  const { venue } = useVenue();
+  const [isMapOpen, setIsMapOpen] = useState(false);
   const prevQueuesRef = useRef(queues);
 
   const activeOrders = orders.filter(
@@ -76,6 +80,8 @@ export default function Home() {
         <div className="absolute -bottom-[20%] -right-[15%] w-[40%] h-[40%] bg-gradient-to-tl from-[#db00ff]/15 to-transparent rounded-full blur-[120px]" />
       </div>
 
+      <VenueSwitcherMap isOpen={isMapOpen} onClose={() => setIsMapOpen(false)} />
+
       <div className="max-w-6xl mx-auto px-4 pt-6 pb-24">
         {/* ═══ HEADER HUD ═══ */}
         <motion.header
@@ -105,8 +111,14 @@ export default function Home() {
                 </h1>
                 <div className="flex items-center gap-2 mt-0.5">
                   <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-ping" />
-                  <p className="text-[10px] font-mono tracking-[0.2em] text-[#00f3ff]/60 uppercase">
-                    SoFi Stadium ⁄⁄ <span className="text-[8px] opacity-40">NODE_ID: 767-171-449</span>
+                  <p className="text-[10px] font-mono tracking-[0.2em] text-[#00f3ff]/60 uppercase flex items-center gap-2">
+                    {venue.name} ⁄⁄ <span className="text-[8px] opacity-40">NODE_ID: {venue.id}</span>
+                    <button 
+                      onClick={() => setIsMapOpen(true)}
+                      className="ml-2 px-2 py-0.5 border border-[#00f3ff]/30 text-[#00f3ff] hover:bg-[#00f3ff]/20 rounded transition-colors"
+                    >
+                      [ SWITCH NODE ]
+                    </button>
                   </p>
                 </div>
               </div>
@@ -147,7 +159,7 @@ export default function Home() {
                      <div className="absolute inset-0 bg-red-500 rounded-full animate-ping opacity-50" />
                   </div>
                   <span className="cyber-badge badge-magenta border-red-500 text-red-500 text-[10px]">LIVE FEED</span>
-                  <span className="text-sm font-black text-white tracking-tight uppercase">SoFi Stadium • Rams vs 49ers</span>
+                  <span className="text-sm font-black text-white tracking-tight uppercase">{venue.name} • Event Active</span>
                   <span className="text-[10px] text-white/30 hidden md:block">⁄⁄ BROADCASTID: 9812-X</span>
                 </div>
                 <div className="flex items-center gap-8">
@@ -323,7 +335,7 @@ export default function Home() {
                       <span className="text-[7px] font-mono text-[#00f3ff] tracking-widest uppercase">ENCRYPT_MODE_AES:256</span>
                    </div>
                    <div className="text-right">
-                      <p className="text-[10px] font-black text-white uppercase tracking-tighter">SOFI STADIUM</p>
+                      <p className="text-[10px] font-black text-white uppercase tracking-tighter">{venue.name}</p>
                    </div>
                 </div>
               </div>

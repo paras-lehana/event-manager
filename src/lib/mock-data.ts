@@ -62,6 +62,18 @@ export const MOCK_STANDS: Stand[] = [
 // Complete venue with stands
 MOCK_VENUE.stands = MOCK_STANDS;
 
+export const MOCK_VENUES: Venue[] = [
+  MOCK_VENUE,
+  {
+    id: "allegiant-stadium",
+    name: "Allegiant Stadium",
+    capacity: 65000,
+    location: { lat: 36.0909, lng: -115.1833 },
+    sections: [],
+    stands: []
+  }
+];
+
 // ============ INITIAL QUEUE DATA ============
 /**
  * Generates an initial state of queue telemetries across all configured stands.

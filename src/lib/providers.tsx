@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
 import { QueueTelemetry, CartItem, MenuItem, Order, ChatMessage, CrewMember } from "@/lib/types";
-import { generateMockQueues, simulateQueueUpdate, MOCK_STANDS, createMockOrders, MOCK_VENUE } from "@/lib/mock-data";
+import { generateMockQueues, simulateQueueUpdate, MOCK_STANDS, createMockOrders, MOCK_VENUE, MOCK_VENUES } from "@/lib/mock-data";
 
 // ============ QUEUE CONTEXT ============
 interface QueueContextType {
@@ -296,19 +296,28 @@ interface VenueContextType {
   venue: typeof MOCK_VENUE;
   stands: typeof MOCK_STANDS;
   getStand: (id: string) => typeof MOCK_STANDS[0] | undefined;
+  activeVenueId: string;
+  setActiveVenueId: (id: string) => void;
+  venues: typeof MOCK_VENUES;
 }
 
 const VenueContext = createContext<VenueContextType>({
   venue: MOCK_VENUE,
   stands: MOCK_STANDS,
   getStand: () => undefined,
+  activeVenueId: "sofi-stadium",
+  setActiveVenueId: () => {},
+  venues: MOCK_VENUES,
 });
 
 export function VenueProvider({ children }: { children: ReactNode }) {
+  const [activeVenueId, setActiveVenueId] = useState("sofi-stadium");
+  
   const getStand = useCallback((id: string) => MOCK_STANDS.find((s) => s.id === id), []);
+  const activeVenue = MOCK_VENUES.find(v => v.id === activeVenueId) || MOCK_VENUE;
 
   return (
-    <VenueContext.Provider value={{ venue: MOCK_VENUE, stands: MOCK_STANDS, getStand }}>
+    <VenueContext.Provider value={{ venue: activeVenue, stands: MOCK_STANDS, getStand, activeVenueId, setActiveVenueId, venues: MOCK_VENUES }}>
       {children}
     </VenueContext.Provider>
   );
